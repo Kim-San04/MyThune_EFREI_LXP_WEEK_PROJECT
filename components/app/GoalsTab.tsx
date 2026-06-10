@@ -79,7 +79,7 @@ export default function GoalsTab({ budget }: GoalsTabProps) {
     >
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="font-heading font-extrabold text-2xl text-ink mb-1">Objectifs d'épargne</h1>
+          <h1 className="font-heading font-extrabold text-2xl text-ink mb-1">Objectifs d&apos;épargne</h1>
           <p className="text-sm text-ink-mid">
             {suggestedSaving > 0
               ? `Thunie suggère de mettre ${fmt(suggestedSaving)} de côté ce mois-ci (20% de ton reste à vivre).`
@@ -159,9 +159,9 @@ export default function GoalsTab({ budget }: GoalsTabProps) {
       ) : (
         <div className="glass rounded-2xl px-6 py-16 text-center">
           <Target size={40} strokeWidth={1.8} className="mx-auto mb-4 text-amber" aria-hidden="true" />
-          <p className="font-heading font-bold text-ink mb-1">Aucun objectif pour l'instant</p>
+          <p className="font-heading font-bold text-ink mb-1">Aucun objectif pour l&apos;instant</p>
           <p className="text-sm text-ink-soft max-w-sm mx-auto">
-            Crée ton premier objectif d'épargne — voyage, fonds d'urgence, nouvel ordi —
+            Crée ton premier objectif d&apos;épargne — voyage, fonds d&apos;urgence, nouvel ordi —
             et suis ta progression mois après mois.
           </p>
         </div>
@@ -226,7 +226,7 @@ function GoalModal({ onClose, onCreate }: { onClose: () => void; onCreate: (goal
 
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-ink-mid mb-1.5">Nom de l'objectif</label>
+            <label className="block text-xs font-semibold text-ink-mid mb-1.5">Nom de l&apos;objectif</label>
             <input
               value={label}
               onChange={(e) => setLabel(e.target.value)}
@@ -297,7 +297,7 @@ function GoalModal({ onClose, onCreate }: { onClose: () => void; onCreate: (goal
           type="submit"
           className="btn w-full mt-7 bg-coral text-white font-heading font-bold text-sm py-3.5 rounded-2xl shadow-warm"
         >
-          Créer l'objectif
+          Créer l&apos;objectif
         </button>
       </motion.form>
     </motion.div>

@@ -37,7 +37,7 @@ export default function ProfileTab({ statements, activeBudget, onSelectStatement
     >
       <div>
         <h1 className="font-heading font-extrabold text-2xl text-ink mb-1">Profil</h1>
-        <p className="text-sm text-ink-mid">Tes informations de compte et l'historique de tes relevés.</p>
+        <p className="text-sm text-ink-mid">Tes informations de compte et l&apos;historique de tes relevés.</p>
       </div>
 
       <div className="glass rounded-2xl px-6 py-5 flex items-center gap-4">

@@ -95,7 +95,7 @@ export default function ComparisonTab({ statements }: ComparisonTabProps) {
     >
       <div>
         <h1 className="font-heading font-extrabold text-2xl text-ink mb-1">Comparaison mensuelle</h1>
-        <p className="text-sm text-ink-mid">Suis l'évolution de tes revenus, dépenses et de ton reste à vivre, mois après mois.</p>
+        <p className="text-sm text-ink-mid">Suis l&apos;évolution de tes revenus, dépenses et de ton reste à vivre, mois après mois.</p>
       </div>
 
       {sorted.length < 2 ? (
@@ -103,7 +103,7 @@ export default function ComparisonTab({ statements }: ComparisonTabProps) {
           <BarChart3 size={40} strokeWidth={1.8} className="mx-auto mb-4 text-amber" aria-hidden="true" />
           <p className="font-heading font-bold text-ink mb-1">Pas encore assez de données</p>
           <p className="text-sm text-ink-soft max-w-sm mx-auto">
-            Importe au moins deux relevés mensuels pour voir l'évolution de ton budget mois après mois.
+            Importe au moins deux relevés mensuels pour voir l&apos;évolution de ton budget mois après mois.
           </p>
         </div>
       ) : (

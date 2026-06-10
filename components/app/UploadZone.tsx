@@ -66,10 +66,10 @@ export default function UploadZone({ onFileSelected, onCancel }: UploadZoneProps
         <div className="text-center mb-10">
           <span className="inline-flex items-center gap-2 bg-amber-light text-amber font-semibold text-sm px-4 py-2 rounded-full mb-5">
             <Sparkles size={16} strokeWidth={2.4} />
-            Étape 1 sur 1 — c'est tout ce qu'il faut
+            Étape 1 sur 1 — c&apos;est tout ce qu&apos;il faut
           </span>
           <h1 className="font-heading font-extrabold text-3xl sm:text-4xl text-ink mb-3">
-            Dépose ton relevé, Thunie s'occupe du reste
+            Dépose ton relevé, Thunie s&apos;occupe du reste
           </h1>
           <p className="font-body text-ink-mid max-w-md mx-auto leading-relaxed">
             Glisse ton relevé bancaire au format PDF ci-dessous. En quelques secondes,

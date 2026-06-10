@@ -323,9 +323,11 @@ export default function OverviewTab({ budget, onNavigate }: OverviewTabProps) {
       const current = prev[txId] ?? [];
       const updated = current.includes(chip) ? current.filter(c => c !== chip) : [...current, chip];
       try {
-        updated.length
-          ? localStorage.setItem(`mythune_chips_${txId}`, JSON.stringify(updated))
-          : localStorage.removeItem(`mythune_chips_${txId}`);
+        if (updated.length) {
+          localStorage.setItem(`mythune_chips_${txId}`, JSON.stringify(updated));
+        } else {
+          localStorage.removeItem(`mythune_chips_${txId}`);
+        }
       } catch {}
       return { ...prev, [txId]: updated };
     });
@@ -334,9 +336,11 @@ export default function OverviewTab({ budget, onNavigate }: OverviewTabProps) {
   function setNote(txId: string, text: string) {
     setNotes(prev => {
       try {
-        text
-          ? localStorage.setItem(`mythune_note_${txId}`, text)
-          : localStorage.removeItem(`mythune_note_${txId}`);
+        if (text) {
+          localStorage.setItem(`mythune_note_${txId}`, text);
+        } else {
+          localStorage.removeItem(`mythune_note_${txId}`);
+        }
       } catch {}
       return { ...prev, [txId]: text };
     });
