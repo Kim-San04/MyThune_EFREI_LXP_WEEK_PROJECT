@@ -111,7 +111,7 @@ export default function ThunieGuide() {
   return (
     <div
       ref={wrapRef}
-      className="fixed z-40 flex flex-col items-center gap-2 opacity-0 pointer-events-none"
+      className="fixed z-40 hidden sm:flex flex-col items-center gap-2 opacity-0 pointer-events-none"
       aria-hidden="true"
     >
       <div

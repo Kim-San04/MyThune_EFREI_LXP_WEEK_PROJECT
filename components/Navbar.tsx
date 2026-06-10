@@ -58,8 +58,9 @@ export default function Navbar() {
           ))}
         </div>
 
-        <EnterAppButton className="btn rounded-xl2 bg-coral text-white font-heading font-semibold text-sm px-5 py-2.5 shadow-warm">
-          Essayer gratuitement
+        <EnterAppButton className="btn shrink-0 rounded-xl2 bg-coral text-white font-heading font-semibold text-sm px-4 py-2.5 sm:px-5 shadow-warm">
+          <span className="sm:hidden">Essayer</span>
+          <span className="hidden sm:inline">Essayer gratuitement</span>
         </EnterAppButton>
       </div>
     </nav>
