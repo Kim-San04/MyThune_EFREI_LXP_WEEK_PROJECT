@@ -3,25 +3,210 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --cream: #fdfaf5;
+  --cream-dark: #f5f0e8;
+  --amber: #f59e0b;
+  --amber-light: #fef3c7;
+  --coral: #f97316;
+  --coral-light: #fff0e8;
+  --sage: #10b981;
+  --sage-light: #ecfdf5;
+  --violet-soft: #8b5cf6;
+  --violet-light: #f5f3ff;
+
+  --text-dark: #1c1917;
+  --text-mid: #57534e;
+  --text-soft: #a8a29e;
+
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(245, 158, 11, 0.2);
+  --glass-shadow: 0 8px 32px rgba(245, 158, 11, 0.08), 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--cream);
+  color: var(--text-dark);
+  overflow-x: hidden;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* ─── Ambient golden-hour blobs ──────────────────────────────────── */
+.bg-blob {
+  position: fixed;
+  border-radius: 9999px;
+  filter: blur(10px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.blob-amber {
+  width: 620px;
+  height: 620px;
+  background: radial-gradient(circle, var(--amber) 0%, transparent 70%);
+  opacity: 0.13;
+  top: -160px;
+  right: -160px;
+}
+
+.blob-coral {
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, var(--coral) 0%, transparent 70%);
+  opacity: 0.12;
+  bottom: -120px;
+  left: -160px;
+}
+
+.blob-sage {
+  width: 460px;
+  height: 460px;
+  background: radial-gradient(circle, var(--sage) 0%, transparent 70%);
+  opacity: 0.1;
+  bottom: 18%;
+  left: 38%;
+}
+
+/* ─── Subtle paper grain overlay ─────────────────────────────────── */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.025;
+  mix-blend-mode: multiply;
+}
+
+/* ─── Glassmorphism (light / warm variant) ───────────────────────── */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(28px) saturate(1.6);
+  -webkit-backdrop-filter: blur(28px) saturate(1.6);
+  border: 1px solid rgba(245, 158, 11, 0.24);
+  box-shadow: 0 16px 48px rgba(245, 158, 11, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+/* ─── Cards ───────────────────────────────────────────────────────── */
+.card {
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-8px) scale(1.02) rotate(-0.6deg);
+  box-shadow: 0 24px 56px rgba(245, 158, 11, 0.16);
+  border-color: rgba(245, 158, 11, 0.32);
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────────── */
+.btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(120deg, transparent 35%, rgba(255, 255, 255, 0.4) 50%, transparent 65%);
+  transform: translateX(-130%);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+}
+.btn:hover::after {
+  transform: translateX(130%);
+}
+.btn:hover {
+  transform: translateY(-3px) scale(1.025);
+  box-shadow: 0 12px 30px rgba(249, 115, 22, 0.3);
+}
+.btn:active {
+  transform: scale(0.93) translateY(1px);
+  transition-duration: 0.08s;
+}
+
+/* ─── Scrollbar ───────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--cream-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(245, 158, 11, 0.35);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 158, 11, 0.6);
+}
+
+/* ─── Misc utilities ──────────────────────────────────────────────── */
+.text-balance {
+  text-wrap: balance;
+}
+
+.gradient-text {
+  background: linear-gradient(120deg, var(--coral) 0%, var(--amber) 45%, var(--violet-soft) 75%, var(--coral) 100%);
+  background-size: 250% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-flow 7s ease-in-out infinite;
+}
+@keyframes gradient-flow {
+  0%, 100% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+}
+
+/* ─── Confetti burst (CTA counter) ───────────────────────────────── */
+.confetti-piece {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* ─── Thunie fox personality ──────────────────────────────────────── */
+@keyframes fox-wink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  93%, 96% { transform: scaleY(0.12); }
+}
+.fox-eye-wink {
+  animation: fox-wink 5.5s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.dotted-line {
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--amber) 0,
+    var(--amber) 6px,
+    transparent 6px,
+    transparent 14px
+  );
+  height: 2px;
 }
