@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { BarChart3, LayoutGrid, ListChecks, MessagesSquare, RotateCcw, Target, User } from "lucide-react";
+import { signOut } from "next-auth/react";
+import { BarChart3, LayoutGrid, ListChecks, LogOut, MessagesSquare, RotateCcw, Target, User } from "lucide-react";
 import type { Budget } from "@/lib/types";
 import type { StoredStatement } from "@/lib/statements-db";
 import OverviewTab from "@/components/app/OverviewTab";
@@ -10,15 +11,22 @@ import ThunieChatTab from "@/components/app/ThunieChatTab";
 import GoalsTab from "@/components/app/GoalsTab";
 import ProfileTab from "@/components/app/ProfileTab";
 import ComparisonTab from "@/components/app/ComparisonTab";
+import UploadPanel from "@/components/app/UploadPanel";
+import AnalyzingPanel from "@/components/app/AnalyzingPanel";
+import UploadModal from "@/components/app/UploadModal";
 import ThunieFox from "@/components/ThunieFox";
 import { formatMonth } from "@/lib/format";
 
 interface DashboardProps {
-  budget: Budget;
+  budget: Budget | null;
   statements: StoredStatement[];
   onSelectStatement: (id: string) => void;
   onDeleteStatement: (id: string) => void;
   onUploadNew: () => void;
+  uploadOpen: boolean;
+  analyzing: boolean;
+  onCloseUpload: () => void;
+  onFileSelected: (file: File) => void;
 }
 
 type TabKey = "overview" | "transactions" | "chat" | "goals" | "comparison" | "profile";
@@ -32,8 +40,41 @@ const TABS: { key: TabKey; label: string; icon: typeof LayoutGrid }[] = [
   { key: "profile", label: "Profil", icon: User },
 ];
 
-export default function Dashboard({ budget, statements, onSelectStatement, onDeleteStatement, onUploadNew }: DashboardProps) {
+export default function Dashboard({
+  budget,
+  statements,
+  onSelectStatement,
+  onDeleteStatement,
+  onUploadNew,
+  uploadOpen,
+  analyzing,
+  onCloseUpload,
+  onFileSelected,
+}: DashboardProps) {
   const [activeTab, setActiveTab] = useState<TabKey>("overview");
+
+  if (!budget) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <header className="px-5 sm:px-8 py-4 flex items-center justify-between border-b border-ink/5">
+          <div className="flex items-center gap-2">
+            <ThunieFox className="w-8 h-8 shrink-0" />
+            <span className="font-heading font-extrabold text-ink">MyThune</span>
+          </div>
+          <button
+            onClick={() => signOut({ callbackUrl: "/" })}
+            className="flex items-center gap-2 text-sm font-semibold text-ink-mid hover:text-coral bg-cream-dark hover:bg-coral-light rounded-xl px-4 py-2.5 transition-colors"
+          >
+            <LogOut size={16} strokeWidth={2.2} />
+            Se déconnecter
+          </button>
+        </header>
+        <main className="flex-1 flex items-center justify-center px-5 sm:px-8 py-10">
+          {analyzing ? <AnalyzingPanel /> : <UploadPanel onFileSelected={onFileSelected} />}
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -129,6 +170,8 @@ export default function Dashboard({ budget, statements, onSelectStatement, onDel
           })}
         </nav>
       </div>
+
+      <UploadModal open={uploadOpen} analyzing={analyzing} onClose={onCloseUpload} onFileSelected={onFileSelected} />
     </div>
   );
 }

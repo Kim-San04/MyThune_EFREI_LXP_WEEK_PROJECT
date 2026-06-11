@@ -3,21 +3,20 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
-import UploadZone from "@/components/app/UploadZone";
 import LoadingScreen from "@/components/app/LoadingScreen";
 import Dashboard from "@/components/app/Dashboard";
 import { deleteStatement, getStatements, saveStatement, type StoredStatement } from "@/lib/statements-db";
 import type { Budget } from "@/lib/types";
 
-type AppState = "loading" | "upload" | "analyzing" | "dashboard";
-
 export default function AppPage() {
   const { data: session, status } = useSession();
   const userId = session?.user?.id;
 
-  const [state, setState] = useState<AppState>("loading");
+  const [loading, setLoading] = useState(true);
   const [statements, setStatements] = useState<StoredStatement[]>([]);
   const [activeBudget, setActiveBudget] = useState<Budget | null>(null);
+  const [uploadOpen, setUploadOpen] = useState(false);
+  const [analyzing, setAnalyzing] = useState(false);
 
   useEffect(() => {
     if (status !== "authenticated" || !userId) return;
@@ -26,17 +25,17 @@ export default function AppPage() {
       setStatements(stored);
       if (stored.length > 0) {
         setActiveBudget(stored[0].budget);
-        setState("dashboard");
       } else {
-        setState("upload");
+        setUploadOpen(true);
       }
+      setLoading(false);
     });
   }, [status, userId]);
 
   const handleFile = useCallback(
     async (file: File) => {
       if (!userId) return;
-      setState("analyzing");
+      setAnalyzing(true);
 
       try {
         const formData = new FormData();
@@ -57,7 +56,7 @@ export default function AppPage() {
           [stored, ...prev.filter((s) => s.month !== budget.month)].sort((a, b) => b.month.localeCompare(a.month))
         );
         setActiveBudget(budget);
-        setState("dashboard");
+        setUploadOpen(false);
         toast.success(
           existed
             ? "Relevé mis à jour — Thunie a tout recalculé pour toi."
@@ -66,7 +65,8 @@ export default function AppPage() {
       } catch (err) {
         const message = err instanceof Error ? err.message : "Une erreur inattendue est survenue.";
         toast.error(message);
-        setState(statements.length > 0 ? "dashboard" : "upload");
+      } finally {
+        setAnalyzing(false);
       }
     },
     [userId, statements]
@@ -93,7 +93,7 @@ export default function AppPage() {
           setActiveBudget(next[0].budget);
         } else {
           setActiveBudget(null);
-          setState("upload");
+          setUploadOpen(true);
         }
       }
       toast("Relevé supprimé");
@@ -102,24 +102,26 @@ export default function AppPage() {
   );
 
   const handleUploadNew = useCallback(() => {
-    setState("upload");
+    setUploadOpen(true);
   }, []);
 
-  const handleCancelUpload = useCallback(() => {
-    setState("dashboard");
-  }, []);
+  const handleCloseUpload = useCallback(() => {
+    if (statements.length > 0) setUploadOpen(false);
+  }, [statements]);
 
-  if (state === "loading" || state === "analyzing" || status === "loading") return <LoadingScreen />;
-  if (state === "dashboard" && activeBudget) {
-    return (
-      <Dashboard
-        budget={activeBudget}
-        statements={statements}
-        onSelectStatement={handleSelectStatement}
-        onDeleteStatement={handleDeleteStatement}
-        onUploadNew={handleUploadNew}
-      />
-    );
-  }
-  return <UploadZone onFileSelected={handleFile} onCancel={statements.length > 0 ? handleCancelUpload : undefined} />;
+  if (loading || status === "loading") return <LoadingScreen />;
+
+  return (
+    <Dashboard
+      budget={activeBudget}
+      statements={statements}
+      onSelectStatement={handleSelectStatement}
+      onDeleteStatement={handleDeleteStatement}
+      onUploadNew={handleUploadNew}
+      uploadOpen={uploadOpen}
+      analyzing={analyzing}
+      onCloseUpload={handleCloseUpload}
+      onFileSelected={handleFile}
+    />
+  );
 }
