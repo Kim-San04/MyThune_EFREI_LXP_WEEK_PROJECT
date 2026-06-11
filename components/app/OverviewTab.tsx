@@ -427,98 +427,100 @@ export default function OverviewTab({ budget, onNavigate }: OverviewTabProps) {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: "easeOut" }}
-        className="space-y-6"
+        className="space-y-3 sm:space-y-6"
       >
         {/* ── Header ──────────────────────────────────────────────── */}
-        <div className="flex items-start justify-between gap-4 pb-2">
+        <div className="flex items-start justify-between gap-3 pb-1 sm:pb-2">
           <div>
-            <h1 className="font-heading font-bold text-[32px] text-ink leading-tight mb-1">{monthLabel}</h1>
+            <h1 className="font-heading font-bold text-[24px] sm:text-[32px] text-ink leading-tight mb-1">{monthLabel}</h1>
             {dateRange && (
-              <p className="text-[15px] text-ink-soft">Relevé · {dateRange}</p>
+              <p className="text-[13px] sm:text-[15px] text-ink-soft">Relevé · {dateRange}</p>
             )}
           </div>
-          <span className="shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-coral-light text-coral border border-[#FDBA74] text-[13px] font-medium mt-1 whitespace-nowrap">
-            <CheckCircle2 size={15} strokeWidth={2.4} aria-hidden="true" />
-            Analysé par Thunie
+          <span className="shrink-0 flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-coral-light text-coral border border-[#FDBA74] text-[11px] sm:text-[13px] font-medium mt-1 whitespace-nowrap">
+            <CheckCircle2 size={13} strokeWidth={2.4} aria-hidden="true" className="sm:hidden" />
+            <CheckCircle2 size={15} strokeWidth={2.4} aria-hidden="true" className="hidden sm:block" />
+            <span className="hidden sm:inline">Analysé par Thunie</span>
+            <span className="sm:hidden">Thunie</span>
           </span>
         </div>
 
         {/* ── KPI Cards ────────────────────────────────────────────── */}
-        <div className="grid sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-4">
           {/* Card 1 — Dépenses */}
           <div
-            className="relative rounded-2xl px-6 py-5"
+            className="relative rounded-xl sm:rounded-2xl px-3.5 py-3.5 sm:px-6 sm:py-5"
             style={{ background: "linear-gradient(135deg, #FFE4D4 0%, #FFBFA0 100%)" }}
           >
-            <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
+            <div className="absolute inset-0 overflow-hidden rounded-xl sm:rounded-2xl pointer-events-none">
               <Wallet
-                size={88}
+                size={64}
                 strokeWidth={1.5}
-                className="absolute right-2 bottom-[-12px] text-coral opacity-[0.12] select-none"
+                className="absolute right-2 bottom-[-10px] text-coral opacity-[0.12] select-none sm:w-[88px] sm:h-[88px]"
                 aria-hidden="true"
               />
             </div>
-            <p className="text-[12px] font-semibold text-coral/60 mb-4">Dépenses du mois</p>
-            <p className="font-heading font-bold text-[38px] text-coral tabular-nums leading-none">
+            <p className="text-[10px] sm:text-[12px] font-semibold text-coral/60 mb-1.5 sm:mb-4">Dépenses du mois</p>
+            <p className="font-heading font-bold text-[19px] sm:text-[38px] text-coral tabular-nums leading-none break-words">
               {fmt(animatedExpenses)}
             </p>
           </div>
 
           {/* Card 2 — Virements */}
           <div
-            className="relative rounded-2xl px-6 py-5"
+            className="relative rounded-xl sm:rounded-2xl px-3.5 py-3.5 sm:px-6 sm:py-5"
             style={{ background: "linear-gradient(135deg, #EDE7DC 0%, #D9D2C4 100%)" }}
           >
-            <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
+            <div className="absolute inset-0 overflow-hidden rounded-xl sm:rounded-2xl pointer-events-none">
               <Landmark
-                size={88}
+                size={64}
                 strokeWidth={1.5}
-                className="absolute right-2 bottom-[-12px] text-ink-mid opacity-[0.12] select-none"
+                className="absolute right-2 bottom-[-10px] text-ink-mid opacity-[0.12] select-none sm:w-[88px] sm:h-[88px]"
                 aria-hidden="true"
               />
             </div>
-            <div className="flex items-center gap-1.5 mb-4">
-              <p className="text-[12px] font-semibold text-ink-soft">Virements émis</p>
+            <div className="flex items-center gap-1 sm:gap-1.5 mb-1.5 sm:mb-4">
+              <p className="text-[10px] sm:text-[12px] font-semibold text-ink-soft">Virements émis</p>
               <div className="relative group">
-                <Info size={12} className="text-ink-soft cursor-default" />
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-52 text-xs bg-ink text-cream rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 text-center leading-snug shadow-lg">
+                <Info size={11} className="text-ink-soft cursor-default" />
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-44 sm:w-52 text-[11px] sm:text-xs bg-ink text-cream rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 text-center leading-snug shadow-lg">
                   Transferts entre comptes — non comptés dans les dépenses
                   <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-ink" />
                 </div>
               </div>
             </div>
-            <p className="font-heading font-bold text-[38px] text-ink-mid tabular-nums leading-none">
+            <p className="font-heading font-bold text-[19px] sm:text-[38px] text-ink-mid tabular-nums leading-none break-words">
               {fmt(animatedTransfers)}
             </p>
           </div>
 
           {/* Card 3 — Poste n°1 */}
           <div
-            className="relative rounded-2xl px-6 py-5"
+            className="relative rounded-xl sm:rounded-2xl px-3.5 py-3.5 sm:px-6 sm:py-5 col-span-2 sm:col-span-1"
             style={{ background: "linear-gradient(135deg, #FEF0A0 0%, #F9C924 100%)" }}
           >
-            <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
+            <div className="absolute inset-0 overflow-hidden rounded-xl sm:rounded-2xl pointer-events-none">
               <Trophy
-                size={88}
+                size={64}
                 strokeWidth={1.5}
-                className="absolute right-2 bottom-[-12px] text-amber opacity-[0.12] select-none"
+                className="absolute right-2 bottom-[-10px] text-amber opacity-[0.12] select-none sm:w-[88px] sm:h-[88px]"
                 aria-hidden="true"
               />
             </div>
-            <p className="text-[12px] font-semibold text-amber/70 mb-3">Là où tu dépenses le plus</p>
+            <p className="text-[10px] sm:text-[12px] font-semibold text-amber/70 mb-1.5 sm:mb-3">Là où tu dépenses le plus</p>
             {topCat ? (
               <div>
-                <div className="flex items-center gap-2 mb-1">
+                <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
                   {(() => {
                     const TopIcon = CATEGORY_ICONS[topCat[0]];
-                    return <TopIcon size={22} strokeWidth={2.2} className="shrink-0 text-amber" aria-hidden="true" />;
+                    return <TopIcon size={18} strokeWidth={2.2} className="shrink-0 text-amber sm:w-[22px] sm:h-[22px]" aria-hidden="true" />;
                   })()}
-                  <span className="font-heading font-bold text-[17px] text-ink leading-tight truncate">{topCatLabel}</span>
+                  <span className="font-heading font-bold text-[14px] sm:text-[17px] text-ink leading-tight truncate">{topCatLabel}</span>
                 </div>
-                <p className="font-heading font-bold text-[28px] text-amber tabular-nums leading-tight">
+                <p className="font-heading font-bold text-[22px] sm:text-[28px] text-amber tabular-nums leading-tight">
                   {fmt(animatedTopCat)}
                 </p>
-                <p className="text-[12px] text-amber/70 mt-1 truncate">{topCatTopMerchant}</p>
+                <p className="text-[11px] sm:text-[12px] text-amber/70 mt-1 truncate">{topCatTopMerchant}</p>
               </div>
             ) : (
               <p className="text-ink-soft text-sm">Aucune dépense</p>
@@ -527,10 +529,10 @@ export default function OverviewTab({ budget, onNavigate }: OverviewTabProps) {
         </div>
 
         {/* ── Répartition ──────────────────────────────────────────── */}
-        <div className="bg-white border border-[#EDE8E0] rounded-2xl px-7 py-7 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-          <h2 className="font-heading font-semibold text-[18px] text-ink mb-6">Répartition par catégorie</h2>
+        <div className="bg-white border border-[#EDE8E0] rounded-xl sm:rounded-2xl px-4 py-4 sm:px-7 sm:py-7 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+          <h2 className="font-heading font-semibold text-[15px] sm:text-[18px] text-ink mb-3 sm:mb-6">Répartition par catégorie</h2>
           {categoryEntries.length ? (
-            <div className="flex flex-col lg:flex-row gap-10 items-start">
+            <div className="flex flex-col lg:flex-row gap-5 lg:gap-10 items-start">
               {/* Donut Chart.js */}
               <div className="shrink-0 mx-auto lg:mx-0">
                 <DonutChart
@@ -553,19 +555,19 @@ export default function OverviewTab({ budget, onNavigate }: OverviewTabProps) {
                       {/* Level 1 row */}
                       <button
                         onClick={() => handleCatClick(cat)}
-                        className="w-full flex items-center gap-3 px-2 py-3 rounded-lg hover:bg-[#FAF7F2] transition-colors duration-150"
+                        className="w-full flex items-center gap-2 sm:gap-3 px-1.5 sm:px-2 py-2.5 sm:py-3 rounded-lg hover:bg-[#FAF7F2] transition-colors duration-150"
                       >
                         <span
                           className="w-2.5 h-2.5 rounded-full shrink-0"
                           style={{ background: CATEGORY_COLORS[cat] }}
                         />
                         <div className="flex-1 min-w-0 text-left">
-                          <p className="text-[15px] font-semibold text-ink">{CATEGORY_LABELS[cat]}</p>
+                          <p className="text-[13px] sm:text-[15px] font-semibold text-ink">{CATEGORY_LABELS[cat]}</p>
                           {subtitle && (
-                            <p className="text-[12px] text-ink-soft mt-0.5 truncate">{subtitle}</p>
+                            <p className="text-[11px] sm:text-[12px] text-ink-soft mt-0.5 truncate">{subtitle}</p>
                           )}
                         </div>
-                        <span className="text-[16px] font-bold text-ink tabular-nums min-w-[64px] text-right shrink-0">
+                        <span className="text-[14px] sm:text-[16px] font-bold text-ink tabular-nums min-w-[56px] sm:min-w-[64px] text-right shrink-0">
                           {fmt(v.total)}
                         </span>
                         <ChevronRight
@@ -648,12 +650,12 @@ export default function OverviewTab({ budget, onNavigate }: OverviewTabProps) {
         </div>
 
         {/* ── Dernières dépenses ────────────────────────────────────── */}
-        <div className="bg-white border border-[#EDE8E0] rounded-2xl px-7 py-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="font-heading font-semibold text-[18px] text-ink">Dernières dépenses</h2>
+        <div className="bg-white border border-[#EDE8E0] rounded-xl sm:rounded-2xl px-4 py-4 sm:px-7 sm:py-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+          <div className="flex items-center justify-between mb-2.5 sm:mb-5">
+            <h2 className="font-heading font-semibold text-[15px] sm:text-[18px] text-ink">Dernières dépenses</h2>
             <button
               onClick={() => onNavigate("transactions")}
-              className="text-[14px] font-medium text-coral hover:underline underline-offset-4"
+              className="text-[13px] sm:text-[14px] font-medium text-coral hover:underline underline-offset-4"
             >
               Voir tout →
             </button>
@@ -663,19 +665,19 @@ export default function OverviewTab({ budget, onNavigate }: OverviewTabProps) {
               {recentExpenses.map(tx => {
                 const Icon = CATEGORY_ICONS[tx.category];
                 return (
-                <li key={tx.id} className="flex items-center gap-3.5 py-3.5">
+                <li key={tx.id} className="flex items-center gap-2.5 sm:gap-3.5 py-2.5 sm:py-3.5">
                   <span
-                    className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center"
+                    className="w-9 h-9 sm:w-11 sm:h-11 shrink-0 rounded-lg sm:rounded-xl flex items-center justify-center"
                     style={{ background: `${CATEGORY_COLORS[tx.category]}26` }}
                   >
-                    <Icon size={20} strokeWidth={2.2} style={{ color: CATEGORY_COLORS[tx.category] }} aria-hidden="true" />
+                    <Icon size={18} strokeWidth={2.2} style={{ color: CATEGORY_COLORS[tx.category] }} aria-hidden="true" className="sm:w-5 sm:h-5" />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[15px] font-semibold text-ink truncate">{tx.cleanLabel}</p>
-                    <p className="text-[13px] text-ink-soft">{CATEGORY_LABELS[tx.category]}</p>
+                    <p className="text-[13px] sm:text-[15px] font-semibold text-ink truncate">{tx.cleanLabel}</p>
+                    <p className="text-[11px] sm:text-[13px] text-ink-soft">{CATEGORY_LABELS[tx.category]}</p>
                   </div>
-                  <span className="text-[13px] text-ink-soft shrink-0">{fmtDate(tx.date)}</span>
-                  <span className="text-[16px] font-bold text-coral tabular-nums ml-4 shrink-0">
+                  <span className="hidden sm:inline text-[13px] text-ink-soft shrink-0">{fmtDate(tx.date)}</span>
+                  <span className="text-[13px] sm:text-[16px] font-bold text-coral tabular-nums ml-2 sm:ml-4 shrink-0">
                     {fmt(tx.amount)}
                   </span>
                 </li>
@@ -689,18 +691,18 @@ export default function OverviewTab({ budget, onNavigate }: OverviewTabProps) {
 
         {/* ── Bulle Thunie ─────────────────────────────────────────── */}
         <div
-          className="rounded-2xl px-6 py-6 border border-[#FDBA74]"
+          className="rounded-xl sm:rounded-2xl px-4 py-4 sm:px-6 sm:py-6 border border-[#FDBA74]"
           style={{ background: "linear-gradient(135deg, #FFF5F0 0%, #FFF8EC 100%)" }}
         >
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 shrink-0 bg-white rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-center">
-              <ThunieFox className="w-9 h-9" />
+          <div className="flex items-start gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 bg-white rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex items-center justify-center">
+              <ThunieFox className="w-7 h-7 sm:w-9 sm:h-9" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[15px] text-[#7C2D12] leading-relaxed">{tip}</p>
+              <p className="text-[13px] sm:text-[15px] text-[#7C2D12] leading-relaxed">{tip}</p>
               <button
                 onClick={() => onNavigate("chat")}
-                className="mt-3 px-5 py-2.5 rounded-[10px] bg-coral text-white text-[14px] font-semibold hover:bg-[#EA6C0A] transition-colors"
+                className="mt-2.5 sm:mt-3 px-4 sm:px-5 py-2 sm:py-2.5 rounded-[10px] bg-coral text-white text-[13px] sm:text-[14px] font-semibold hover:bg-[#EA6C0A] transition-colors"
               >
                 Parler à Thunie →
               </button>
