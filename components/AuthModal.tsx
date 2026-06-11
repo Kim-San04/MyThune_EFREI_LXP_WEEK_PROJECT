@@ -92,7 +92,7 @@ export default function AuthModal({ open, onClose, onSuccess }: AuthModalProps) 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 bg-ink/30 backdrop-blur-sm flex items-center justify-center px-6"
+          className="fixed inset-0 z-50 bg-ink/30 backdrop-blur-sm flex items-center justify-center px-4 py-8 overflow-y-auto"
           onClick={handleClose}
         >
           <motion.form
@@ -102,7 +102,7 @@ export default function AuthModal({ open, onClose, onSuccess }: AuthModalProps) 
             transition={{ duration: 0.25, ease: "easeOut" }}
             onClick={(e) => e.stopPropagation()}
             onSubmit={handleSubmit}
-            className="glass-strong rounded-3xl p-7 w-full max-w-md"
+            className="glass-strong rounded-3xl p-5 sm:p-7 w-full max-w-md max-h-full overflow-y-auto my-auto"
           >
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-3">

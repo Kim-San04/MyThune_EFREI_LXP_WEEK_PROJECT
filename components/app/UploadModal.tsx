@@ -29,7 +29,7 @@ export default function UploadModal({ open, analyzing, onClose, onFileSelected }
             exit={{ opacity: 0, scale: 0.96, y: 16 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
             onClick={(e) => e.stopPropagation()}
-            className="glass-strong rounded-3xl px-6 py-8 sm:px-10 sm:py-10 w-full max-w-xl my-auto relative"
+            className="glass-strong rounded-3xl px-5 py-6 sm:px-10 sm:py-10 w-full max-w-xl max-h-full overflow-y-auto my-auto relative"
           >
             {onClose && !analyzing && (
               <button

@@ -31,10 +31,35 @@ html {
   scroll-behavior: smooth;
 }
 
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
 body {
   background: var(--cream);
   color: var(--text-dark);
-  overflow-x: hidden;
+}
+
+/* ─── iOS Safari zooms the page when an input's font-size is < 16px ── */
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* ─── Safe-area insets for PWA (iOS notch / home indicator) ─────────── */
+.safe-top {
+  padding-top: max(env(safe-area-inset-top), 1rem);
+}
+.safe-bottom {
+  padding-bottom: max(env(safe-area-inset-bottom), 0.5rem);
+}
+.safe-x {
+  padding-left: max(env(safe-area-inset-left), 1.25rem);
+  padding-right: max(env(safe-area-inset-right), 1.25rem);
 }
 
 /* ─── Ambient golden-hour blobs ──────────────────────────────────── */

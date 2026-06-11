@@ -56,7 +56,7 @@ export default function Dashboard({
   if (!budget) {
     return (
       <div className="min-h-screen flex flex-col">
-        <header className="px-5 sm:px-8 py-4 flex items-center justify-between border-b border-ink/5">
+        <header className="safe-top px-5 sm:px-8 py-4 flex items-center justify-between border-b border-ink/5">
           <div className="flex items-center gap-2">
             <ThunieFox className="w-8 h-8 shrink-0" />
             <span className="font-heading font-extrabold text-ink">MyThune</span>
@@ -69,7 +69,7 @@ export default function Dashboard({
             Se déconnecter
           </button>
         </header>
-        <main className="flex-1 flex items-center justify-center px-5 sm:px-8 py-10">
+        <main className="flex-1 flex items-center justify-center px-5 sm:px-8 py-10 safe-bottom">
           {analyzing ? <AnalyzingPanel /> : <UploadPanel onFileSelected={onFileSelected} />}
         </main>
       </div>
@@ -122,7 +122,7 @@ export default function Dashboard({
       </aside>
 
       <div className="flex-1 min-w-0 flex flex-col">
-        <header className="lg:hidden sticky top-0 z-20 bg-cream/90 backdrop-blur-md border-b border-ink/5 px-5 py-4 flex items-center justify-between">
+        <header className="lg:hidden sticky top-0 z-20 bg-cream/90 backdrop-blur-md border-b border-ink/5 safe-top px-5 pb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ThunieFox className="w-7 h-7 shrink-0" />
             <span className="font-heading font-extrabold text-ink">MyThune</span>
@@ -152,7 +152,7 @@ export default function Dashboard({
           )}
         </main>
 
-        <nav className="lg:hidden sticky bottom-0 z-20 bg-cream/95 backdrop-blur-md border-t border-ink/5 px-3 py-2 flex items-center justify-around">
+        <nav className="lg:hidden sticky bottom-0 z-20 bg-cream/95 backdrop-blur-md border-t border-ink/5 px-3 pt-2 safe-bottom flex items-center justify-around">
           {TABS.map(({ key, label, icon: Icon }) => {
             const isActive = activeTab === key;
             return (

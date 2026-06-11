@@ -205,7 +205,7 @@ function GoalModal({ onClose, onCreate }: { onClose: () => void; onCreate: (goal
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 bg-ink/30 backdrop-blur-sm flex items-center justify-center px-6"
+      className="fixed inset-0 z-50 bg-ink/30 backdrop-blur-sm flex items-center justify-center px-4 py-8 overflow-y-auto"
       onClick={onClose}
     >
       <motion.form
@@ -215,7 +215,7 @@ function GoalModal({ onClose, onCreate }: { onClose: () => void; onCreate: (goal
         transition={{ duration: 0.25, ease: "easeOut" }}
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}
-        className="glass-strong rounded-3xl p-7 w-full max-w-md"
+        className="glass-strong rounded-3xl p-5 sm:p-7 w-full max-w-md max-h-full overflow-y-auto my-auto"
       >
         <div className="flex items-center justify-between mb-6">
           <h2 className="font-heading font-extrabold text-xl text-ink">Nouvel objectif</h2>
@@ -236,23 +236,23 @@ function GoalModal({ onClose, onCreate }: { onClose: () => void; onCreate: (goal
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <div>
+            <div className="min-w-0">
               <label className="block text-xs font-semibold text-ink-mid mb-1.5">Montant cible</label>
               <input
                 value={targetAmount}
                 onChange={(e) => setTargetAmount(e.target.value)}
                 placeholder="800"
                 inputMode="decimal"
-                className="w-full px-4 py-2.5 rounded-xl bg-cream-dark text-sm text-ink placeholder:text-ink-soft focus:outline-none focus:ring-2 focus:ring-amber/40"
+                className="w-full min-w-0 px-3 sm:px-4 py-2.5 rounded-xl bg-cream-dark text-sm text-ink placeholder:text-ink-soft focus:outline-none focus:ring-2 focus:ring-amber/40"
               />
             </div>
-            <div>
+            <div className="min-w-0">
               <label className="block text-xs font-semibold text-ink-mid mb-1.5">Échéance</label>
               <input
                 type="month"
                 value={targetDate}
                 onChange={(e) => setTargetDate(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl bg-cream-dark text-sm text-ink focus:outline-none focus:ring-2 focus:ring-amber/40"
+                className="w-full min-w-0 px-3 sm:px-4 py-2.5 rounded-xl bg-cream-dark text-sm text-ink focus:outline-none focus:ring-2 focus:ring-amber/40"
               />
             </div>
           </div>

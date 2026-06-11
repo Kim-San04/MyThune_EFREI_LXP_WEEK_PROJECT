@@ -42,7 +42,7 @@ export default function Navbar() {
         scrolled ? "bg-[rgba(253,250,245,0.85)] backdrop-blur-2xl shadow-glass" : "bg-transparent"
       }`}
     >
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-6 safe-top pb-4 flex items-center justify-between">
         <a href="#" className="flex items-center gap-2 group">
           <span className="text-2xl">🦊</span>
           <span className="font-heading font-extrabold text-xl text-ink group-hover:text-coral transition-colors">
