@@ -1,4 +1,4 @@
-import { Heart, MessageCircle, Send, Mail } from "lucide-react";
+import ThunieFox from "@/components/ThunieFox";
 
 const COLUMNS = [
   {
@@ -15,16 +15,14 @@ const COLUMNS = [
   },
 ];
 
-const SOCIALS = [Heart, MessageCircle, Send, Mail];
-
 export default function Footer() {
   return (
-    <footer className="relative bg-cream-dark/70 pt-16 pb-8 px-6">
+    <footer className="relative bg-cream-dark/70 pt-10 pb-6 sm:pt-16 sm:pb-8 px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
-          <div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 mb-8 sm:gap-10 sm:mb-12">
+          <div className="col-span-2 lg:col-span-1">
             <a href="#" className="flex items-center gap-2 mb-3">
-              <span className="text-2xl">🦊</span>
+              <ThunieFox className="w-8 h-8" />
               <span className="font-heading font-extrabold text-xl text-ink">MyThune</span>
             </a>
             <p className="text-ink-mid text-sm leading-relaxed max-w-[220px]">
@@ -34,8 +32,8 @@ export default function Footer() {
 
           {COLUMNS.map((col) => (
             <div key={col.title}>
-              <p className="font-heading font-bold text-ink text-sm mb-4">{col.title}</p>
-              <ul className="flex flex-col gap-2.5">
+              <p className="font-heading font-bold text-ink text-sm mb-3 sm:mb-4">{col.title}</p>
+              <ul className="flex flex-col gap-2 sm:gap-2.5">
                 {col.links.map((link) => (
                   <li key={link}>
                     <a href="#" className="text-ink-mid text-sm hover:text-coral transition-colors">
@@ -46,24 +44,6 @@ export default function Footer() {
               </ul>
             </div>
           ))}
-        </div>
-
-        <div className="border-t border-ink/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-ink-soft text-xs">
-            © 2025 MyThune — Fait avec ☕ et beaucoup d&apos;amour
-          </p>
-          <div className="flex items-center gap-4">
-            {SOCIALS.map((Icon, i) => (
-              <a
-                key={i}
-                href="#"
-                className="text-ink-soft hover:text-coral transition-colors"
-                aria-label="social link"
-              >
-                <Icon size={18} strokeWidth={2} />
-              </a>
-            ))}
-          </div>
         </div>
       </div>
     </footer>

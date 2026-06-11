@@ -6,8 +6,7 @@ const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
   if (!req.auth) {
-    const url = new URL("/", req.nextUrl.origin);
-    url.searchParams.set("login", "1");
+    const url = new URL("/entrer", req.nextUrl.origin);
     return NextResponse.redirect(url);
   }
 });

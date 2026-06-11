@@ -111,17 +111,17 @@ export default function ThunieGuide() {
   return (
     <div
       ref={wrapRef}
-      className="fixed z-40 hidden sm:flex flex-col items-center gap-2 opacity-0 pointer-events-none"
+      className="fixed z-40 flex flex-col items-center gap-2 opacity-0 pointer-events-none"
       aria-hidden="true"
     >
       <div
         ref={bubbleRef}
-        className="hidden sm:block max-w-[180px] bg-white/95 backdrop-blur-sm border border-coral/15 rounded-2xl rounded-bl-sm px-3.5 py-2.5 shadow-warm text-[12px] leading-snug text-ink-mid text-left"
+        className="block max-w-[140px] sm:max-w-[180px] bg-white/95 backdrop-blur-sm border border-coral/15 rounded-2xl rounded-bl-sm px-3 py-2 sm:px-3.5 sm:py-2.5 shadow-warm text-[11px] sm:text-[12px] leading-snug text-ink-mid text-left"
       >
         <span className="font-heading font-bold text-coral block mb-0.5">Thunie 🦊</span>
         {line}
       </div>
-      <div ref={foxRef} className="w-[60px] h-[60px] sm:w-[76px] sm:h-[76px] animate-float">
+      <div ref={foxRef} className="w-[48px] h-[48px] sm:w-[76px] sm:h-[76px] animate-float">
         <ThunieFox className="w-full h-full drop-shadow-[0_10px_24px_rgba(249,115,22,0.35)]" />
       </div>
     </div>

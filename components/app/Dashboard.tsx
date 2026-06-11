@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signOut } from "next-auth/react";
-import { BarChart3, LayoutGrid, ListChecks, LogOut, MessagesSquare, RotateCcw, Target, User } from "lucide-react";
+import { BarChart3, LayoutGrid, ListChecks, LogOut, MessagesSquare, RotateCcw, Sparkles, Target, User } from "lucide-react";
+import { motion } from "framer-motion";
 import type { Budget } from "@/lib/types";
 import type { StoredStatement } from "@/lib/statements-db";
 import OverviewTab from "@/components/app/OverviewTab";
@@ -11,11 +12,8 @@ import ThunieChatTab from "@/components/app/ThunieChatTab";
 import GoalsTab from "@/components/app/GoalsTab";
 import ProfileTab from "@/components/app/ProfileTab";
 import ComparisonTab from "@/components/app/ComparisonTab";
-import UploadPanel from "@/components/app/UploadPanel";
-import AnalyzingPanel from "@/components/app/AnalyzingPanel";
 import UploadModal from "@/components/app/UploadModal";
 import ThunieFox from "@/components/ThunieFox";
-import { formatMonth } from "@/lib/format";
 
 interface DashboardProps {
   budget: Budget | null;
@@ -53,39 +51,26 @@ export default function Dashboard({
 }: DashboardProps) {
   const [activeTab, setActiveTab] = useState<TabKey>("overview");
 
-  if (!budget) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <header className="safe-top px-5 sm:px-8 py-4 flex items-center justify-between border-b border-ink/5">
-          <div className="flex items-center gap-2">
-            <ThunieFox className="w-8 h-8 shrink-0" />
-            <span className="font-heading font-extrabold text-ink">MyThune</span>
-          </div>
-          <button
-            onClick={() => signOut({ callbackUrl: "/" })}
-            className="flex items-center gap-2 text-sm font-semibold text-ink-mid hover:text-coral bg-cream-dark hover:bg-coral-light rounded-xl px-4 py-2.5 transition-colors"
-          >
-            <LogOut size={16} strokeWidth={2.2} />
-            Se déconnecter
-          </button>
-        </header>
-        <main className="flex-1 flex items-center justify-center px-5 sm:px-8 py-10 safe-bottom">
-          {analyzing ? <AnalyzingPanel /> : <UploadPanel onFileSelected={onFileSelected} />}
-        </main>
-      </div>
-    );
-  }
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (!budget) setActiveTab("overview");
+  }, [budget]);
+
+  const visibleTabs = budget ? TABS : TABS.filter((t) => t.key === "overview");
 
   return (
     <div className="flex min-h-screen">
-      <aside className="hidden lg:flex w-[224px] shrink-0 flex-col border-r border-[#EDE8E0] bg-white px-4 py-6 sticky top-0 h-screen">
+      <aside className="hidden lg:flex lg:fixed lg:left-0 lg:top-0 lg:z-30 w-[224px] shrink-0 flex-col border-r border-[#EDE8E0] bg-white px-4 py-6 h-screen">
         <div className="flex items-center gap-2.5 px-2 mb-8">
           <ThunieFox className="w-9 h-9 shrink-0" />
           <span className="font-heading font-bold text-[18px] text-ink">MyThune</span>
         </div>
 
         <nav className="flex-1 space-y-1">
-          {TABS.map(({ key, label, icon: Icon }) => {
+          {visibleTabs.map(({ key, label, icon: Icon }) => {
             const isActive = activeTab === key;
             return (
               <button
@@ -108,9 +93,6 @@ export default function Dashboard({
         </nav>
 
         <div className="pt-4 border-t border-[#EDE8E0]">
-          <p className="px-2 mb-3 text-[13px] text-ink-soft">
-            Relevé · <span className="font-semibold text-ink-mid">{formatMonth(budget.month)}</span>
-          </p>
           <button
             onClick={onUploadNew}
             className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-[10px] text-[14px] font-medium text-amber border border-dashed border-amber hover:bg-amber-light transition-colors"
@@ -121,8 +103,8 @@ export default function Dashboard({
         </div>
       </aside>
 
-      <div className="flex-1 min-w-0 flex flex-col">
-        <header className="lg:hidden sticky top-0 z-20 bg-cream/90 backdrop-blur-md border-b border-ink/5 safe-top px-5 pb-4 flex items-center justify-between">
+      <div className="flex-1 min-w-0 flex flex-col lg:ml-[224px]">
+        <header className="lg:hidden fixed top-0 inset-x-0 z-20 bg-cream/90 backdrop-blur-md border-b border-ink/5 safe-top px-5 pb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ThunieFox className="w-7 h-7 shrink-0" />
             <span className="font-heading font-extrabold text-ink">MyThune</span>
@@ -132,28 +114,61 @@ export default function Dashboard({
           </button>
         </header>
 
-        <main className="flex-1 px-5 sm:px-8 py-7 max-w-6xl w-full mx-auto">
-          {activeTab === "overview" && <OverviewTab budget={budget} onNavigate={(tab) => setActiveTab(tab)} />}
-          {activeTab === "transactions" && <TransactionsTab budget={budget} />}
-          {activeTab === "chat" && <ThunieChatTab budget={budget} />}
-          {activeTab === "goals" && <GoalsTab budget={budget} />}
-          {activeTab === "comparison" && <ComparisonTab statements={statements} />}
-          {activeTab === "profile" && (
-            <ProfileTab
-              statements={statements}
-              activeBudget={budget}
-              onSelectStatement={(id) => {
-                onSelectStatement(id);
-                setActiveTab("overview");
-              }}
-              onDeleteStatement={onDeleteStatement}
-              onUploadNew={onUploadNew}
-            />
+        <main className="flex-1 px-5 sm:px-8 pt-[calc(env(safe-area-inset-top)+64px)] pb-[calc(env(safe-area-inset-bottom)+68px)] lg:pt-7 lg:pb-7 max-w-6xl w-full mx-auto">
+          {!budget ? (
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+              className="flex flex-col items-center justify-center text-center min-h-[60vh] gap-4"
+            >
+              <ThunieFox className="w-20 h-20 sm:w-24 sm:h-24" />
+              <div className="space-y-1.5">
+                <h1 className="font-heading font-extrabold text-xl sm:text-2xl text-ink">Bienvenue sur MyThune !</h1>
+                <p className="text-sm text-ink-mid max-w-sm mx-auto">
+                  Importe ton premier relevé bancaire (PDF) pour que Thunie l&apos;analyse et te prépare ton tableau de bord.
+                </p>
+              </div>
+              <button
+                onClick={onUploadNew}
+                className="btn flex items-center gap-2 bg-coral text-white font-semibold rounded-xl px-5 py-3 shadow-warm"
+              >
+                <Sparkles size={17} strokeWidth={2.4} />
+                Importer mon relevé
+              </button>
+              <button
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="flex items-center gap-2 text-sm font-semibold text-ink-soft hover:text-coral transition-colors mt-2"
+              >
+                <LogOut size={15} strokeWidth={2.2} />
+                Se déconnecter
+              </button>
+            </motion.div>
+          ) : (
+            <>
+              {activeTab === "overview" && <OverviewTab budget={budget} onNavigate={(tab) => setActiveTab(tab)} />}
+              {activeTab === "transactions" && <TransactionsTab budget={budget} />}
+              {activeTab === "chat" && <ThunieChatTab budget={budget} />}
+              {activeTab === "goals" && <GoalsTab budget={budget} />}
+              {activeTab === "comparison" && <ComparisonTab statements={statements} />}
+              {activeTab === "profile" && (
+                <ProfileTab
+                  statements={statements}
+                  activeBudget={budget}
+                  onSelectStatement={(id) => {
+                    onSelectStatement(id);
+                    setActiveTab("overview");
+                  }}
+                  onDeleteStatement={onDeleteStatement}
+                  onUploadNew={onUploadNew}
+                />
+              )}
+            </>
           )}
         </main>
 
-        <nav className="lg:hidden sticky bottom-0 z-20 bg-cream/95 backdrop-blur-md border-t border-ink/5 px-3 pt-2 safe-bottom flex items-center justify-around">
-          {TABS.map(({ key, label, icon: Icon }) => {
+        <nav className="lg:hidden fixed bottom-0 inset-x-0 z-20 bg-cream/95 backdrop-blur-md border-t border-ink/5 px-3 pt-2 safe-bottom flex items-center justify-around">
+          {visibleTabs.map(({ key, label, icon: Icon }) => {
             const isActive = activeTab === key;
             return (
               <button

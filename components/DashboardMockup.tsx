@@ -145,15 +145,15 @@ export default function DashboardMockup() {
     <section
       ref={sectionRef}
       id="dashboard-mockup"
-      className="relative py-24 px-6 bg-cream-dark/60"
+      className="relative py-14 sm:py-20 md:py-24 px-6 bg-cream-dark/60"
       style={{ perspective: "1500px" }}
     >
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="font-heading font-bold text-3xl sm:text-4xl text-ink mb-3">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="font-heading font-bold text-2xl sm:text-4xl text-ink mb-3">
             Vois exactement où va ton argent.
           </h2>
-          <p className="text-ink-soft text-lg">
+          <p className="text-ink-soft text-base sm:text-lg">
             Ce que voit Lucas après avoir uploadé son relevé Boursorama.
           </p>
         </div>
@@ -162,20 +162,20 @@ export default function DashboardMockup() {
           className="dash-mockup-card glass-strong rounded-[28px] p-6 sm:p-9 will-change-transform transition-transform duration-300 ease-out"
           style={{ transformStyle: "preserve-3d" }}
         >
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-6 sm:mb-8">
             <div>
-              <p className="font-heading font-bold text-xl text-ink">Bonjour Lucas 👋</p>
+              <p className="font-heading font-bold text-lg sm:text-xl text-ink">Bonjour Lucas 👋</p>
               <p className="text-ink-soft text-sm font-medium">Janvier 2025</p>
             </div>
-            <div className="bg-sage-light text-sage font-heading font-extrabold text-lg px-5 py-2.5 rounded-2xl">
-              1 247 € restants
+            <div className="bg-coral-light text-coral font-heading font-extrabold text-base sm:text-lg px-4 py-2 sm:px-5 sm:py-2.5 rounded-2xl">
+              1 542 € dépensés
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-10">
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-10">
             {/* Donut + legend */}
             <div className="flex flex-col items-center">
-              <div className="relative w-[200px] h-[200px] mb-6">
+              <div className="relative w-[160px] h-[160px] sm:w-[200px] sm:h-[200px] mb-6">
                 {chartVisible && <Doughnut data={DATA} options={OPTIONS} />}
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                   <p className="text-ink-soft text-xs">Total dépensé</p>
@@ -195,10 +195,12 @@ export default function DashboardMockup() {
 
             {/* Transaction list */}
             <div className="flex flex-col gap-2">
-              {TRANSACTIONS.map((t) => (
+              {TRANSACTIONS.map((t, i) => (
                 <div
                   key={t.label}
-                  className="dash-transaction flex items-center gap-3 bg-cream/80 hover:bg-cream rounded-xl px-4 py-3 transition-colors"
+                  className={`dash-transaction items-center gap-3 bg-cream/80 hover:bg-cream rounded-xl px-4 py-3 transition-colors ${
+                    i >= 3 ? "hidden sm:flex" : "flex"
+                  }`}
                 >
                   <span className="text-xl flex-shrink-0">{t.emoji}</span>
                   <div className="flex-1 min-w-0">
@@ -222,7 +224,7 @@ export default function DashboardMockup() {
           </div>
 
           {/* Thunie bubble */}
-          <div className="mt-8 flex items-start gap-3 bg-coral-light border border-coral/20 rounded-2xl rounded-tl-sm px-5 py-4 max-w-xl ml-auto">
+          <div className="hidden sm:flex mt-6 sm:mt-8 items-start gap-3 bg-coral-light border border-coral/20 rounded-2xl rounded-tl-sm px-5 py-4 max-w-xl ml-auto">
             <span className="text-2xl flex-shrink-0">🦊</span>
             <p className="text-sm text-ink-mid leading-relaxed">
               <span className="font-heading font-bold text-coral">Thunie — </span>

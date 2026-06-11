@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Plus, Target, Trash2, X } from "lucide-react";
+import { Plus, Sparkles, Target, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import type { Budget, SavingsGoal } from "@/lib/types";
 import { DEFAULT_GOAL_ICON_KEY, GOAL_ICON_OPTIONS, GOAL_ICONS } from "@/lib/icons";
@@ -30,6 +30,71 @@ function loadGoals(): SavingsGoal[] {
 
 function saveGoals(goals: SavingsGoal[]) {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(goals));
+}
+
+function defaultTargetDate(monthsAhead: number): string {
+  const d = new Date();
+  d.setMonth(d.getMonth() + monthsAhead);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-01`;
+}
+
+interface GoalSuggestion {
+  key: string;
+  label: string;
+  targetAmount: number;
+  months: number;
+  icon: string;
+  color: string;
+  rationale: string;
+}
+
+function buildSuggestions(budget: Budget): GoalSuggestion[] {
+  const list: GoalSuggestion[] = [];
+  const realExpenses = budget.totalExpenses;
+  const suggestedSaving = Math.max(0, Math.round(budget.remaining * 0.2));
+
+  if (realExpenses > 0) {
+    const target = Math.round(realExpenses * 3);
+    list.push({
+      key: "urgence",
+      label: "Fonds d'urgence",
+      targetAmount: target,
+      months: 12,
+      icon: "lifebuoy",
+      color: "#10B981",
+      rationale: `Vise ${fmt(target)} (3 mois de dépenses) pour voir venir les imprévus sans stress.`,
+    });
+  }
+
+  if (suggestedSaving > 0) {
+    const target = suggestedSaving * 6;
+    list.push({
+      key: "epargne",
+      label: "Épargne de précaution",
+      targetAmount: target,
+      months: 6,
+      icon: "target",
+      color: "#F59E0B",
+      rationale: `En mettant ${fmt(suggestedSaving)}/mois de côté (20% de ta marge de fin de mois), tu atteins ${fmt(target)} en 6 mois.`,
+    });
+  }
+
+  const abosTotal = budget.byCategory["abonnements"]?.total ?? 0;
+  if (abosTotal > 0 && realExpenses > 0 && abosTotal / realExpenses > 0.12) {
+    const annual = abosTotal * 12;
+    const target = Math.round(annual * 0.3);
+    list.push({
+      key: "abonnements",
+      label: "Stop abonnements inutiles",
+      targetAmount: target,
+      months: 12,
+      icon: "laptop",
+      color: "#8B5CF6",
+      rationale: `Tes abonnements coûtent ${fmt(annual)}/an. Annule ceux que tu n'utilises plus pour économiser jusqu'à ${fmt(target)}.`,
+    });
+  }
+
+  return list;
 }
 
 interface GoalsTabProps {
@@ -70,6 +135,23 @@ export default function GoalsTab({ budget }: GoalsTabProps) {
 
   const suggestedSaving = Math.max(0, Math.round(budget.remaining * 0.2));
 
+  const suggestions = useMemo(() => {
+    const existingLabels = new Set(goals.map((g) => g.label.trim().toLowerCase()));
+    return buildSuggestions(budget).filter((s) => !existingLabels.has(s.label.toLowerCase()));
+  }, [budget, goals]);
+
+  function handleAddSuggestion(s: GoalSuggestion) {
+    handleCreate({
+      id: `goal-${Date.now()}-${s.key}`,
+      label: s.label,
+      targetAmount: s.targetAmount,
+      currentAmount: 0,
+      targetDate: defaultTargetDate(s.months),
+      icon: s.icon,
+      color: s.color,
+    });
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -82,7 +164,7 @@ export default function GoalsTab({ budget }: GoalsTabProps) {
           <h1 className="font-heading font-extrabold text-2xl text-ink mb-1">Objectifs d&apos;épargne</h1>
           <p className="text-sm text-ink-mid">
             {suggestedSaving > 0
-              ? `Thunie suggère de mettre ${fmt(suggestedSaving)} de côté ce mois-ci (20% de ton reste à vivre).`
+              ? `Thunie suggère de mettre ${fmt(suggestedSaving)} de côté ce mois-ci (20% de ta marge de fin de mois).`
               : "Définis un objectif et suis ta progression au fil des mois."}
           </p>
         </div>
@@ -94,6 +176,48 @@ export default function GoalsTab({ budget }: GoalsTabProps) {
           Nouvel objectif
         </button>
       </div>
+
+      {suggestions.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Sparkles size={17} strokeWidth={2.2} className="text-amber" aria-hidden="true" />
+            <h2 className="font-heading font-bold text-[15px] sm:text-lg text-ink">Suggestions de Thunie</h2>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {suggestions.map((s) => {
+              const SuggestionIcon = GOAL_ICONS[s.icon] ?? GOAL_ICONS[DEFAULT_GOAL_ICON_KEY];
+              return (
+                <div
+                  key={s.key}
+                  className="rounded-2xl px-5 py-4 border border-dashed"
+                  style={{ borderColor: `${s.color}55`, background: `${s.color}0D` }}
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <span
+                      className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center"
+                      style={{ background: `${s.color}22` }}
+                    >
+                      <SuggestionIcon size={20} strokeWidth={2.2} style={{ color: s.color }} aria-hidden="true" />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="font-heading font-bold text-sm text-ink">{s.label}</p>
+                      <p className="text-xs text-ink-soft">Objectif : {fmt(s.targetAmount)}</p>
+                    </div>
+                  </div>
+                  <p className="text-xs text-ink-mid leading-relaxed mb-3">{s.rationale}</p>
+                  <button
+                    onClick={() => handleAddSuggestion(s)}
+                    className="w-full text-xs font-semibold text-white rounded-xl py-2 transition-colors hover:opacity-90"
+                    style={{ background: s.color }}
+                  >
+                    + Ajouter cet objectif
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {goals.length ? (
         <div className="grid sm:grid-cols-2 gap-4">
@@ -156,7 +280,7 @@ export default function GoalsTab({ budget }: GoalsTabProps) {
             );
           })}
         </div>
-      ) : (
+      ) : suggestions.length === 0 ? (
         <div className="glass rounded-2xl px-6 py-16 text-center">
           <Target size={40} strokeWidth={1.8} className="mx-auto mb-4 text-amber" aria-hidden="true" />
           <p className="font-heading font-bold text-ink mb-1">Aucun objectif pour l&apos;instant</p>
@@ -165,7 +289,7 @@ export default function GoalsTab({ budget }: GoalsTabProps) {
             et suis ta progression mois après mois.
           </p>
         </div>
-      )}
+      ) : null}
 
       <AnimatePresence>
         {showModal && <GoalModal onClose={() => setShowModal(false)} onCreate={handleCreate} />}

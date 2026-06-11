@@ -66,8 +66,8 @@ export default function HeroMockup() {
           <p className="text-ink-soft text-xs font-medium">Janvier 2025</p>
         </div>
         <div className="text-right">
-          <p className="text-ink-soft text-xs font-medium">Reste à vivre</p>
-          <p className="font-heading font-extrabold text-sage text-lg">1 247 €</p>
+          <p className="text-ink-soft text-xs font-medium">Dépense mensuelle</p>
+          <p className="font-heading font-extrabold text-coral text-lg">1 542 €</p>
         </div>
       </div>
 

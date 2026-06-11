@@ -71,9 +71,9 @@ export default function HowItWorksSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="comment-ca-marche" className="relative py-24 px-6">
+    <section ref={sectionRef} id="comment-ca-marche" className="relative py-14 sm:py-20 md:py-24 px-6">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-center font-heading font-bold text-3xl sm:text-4xl text-ink mb-16">
+        <h2 className="text-center font-heading font-bold text-2xl sm:text-4xl text-ink mb-10 sm:mb-16">
           En 4 étapes, c&apos;est réglé.
         </h2>
 
@@ -85,19 +85,20 @@ export default function HowItWorksSection() {
             aria-hidden="true"
           />
 
-          <div className="grid md:grid-cols-4 gap-10 md:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8 md:gap-6">
             {STEPS.map((step, i) => {
               const Icon = step.icon;
               return (
                 <div key={step.title} className="step-item relative flex flex-col items-center text-center">
-                  <div className="relative z-10 w-12 h-12 rounded-full bg-amber-light flex items-center justify-center mb-5">
-                    <Icon size={20} className="text-amber" strokeWidth={2.4} />
+                  <div className="relative z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-amber-light flex items-center justify-center mb-3 sm:mb-5">
+                    <Icon size={18} className="text-amber sm:hidden" strokeWidth={2.4} />
+                    <Icon size={20} className="text-amber hidden sm:block" strokeWidth={2.4} />
                     <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-coral text-white text-[10px] font-bold flex items-center justify-center font-heading">
                       {i + 1}
                     </span>
                   </div>
-                  <h3 className="font-heading font-bold text-base text-ink mb-2">{step.title}</h3>
-                  <p className="text-sm text-ink-mid leading-relaxed max-w-[230px]">{step.text}</p>
+                  <h3 className="font-heading font-bold text-sm sm:text-base text-ink mb-1.5 sm:mb-2">{step.title}</h3>
+                  <p className="text-xs sm:text-sm text-ink-mid leading-relaxed max-w-[230px]">{step.text}</p>
                 </div>
               );
             })}

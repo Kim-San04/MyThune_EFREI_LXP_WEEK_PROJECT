@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { getGsap } from "@/lib/gsap-animations";
-import EnterAppButton from "@/components/EnterAppButton";
+import InstallAppButton from "@/components/InstallAppButton";
+import ThunieFox from "@/components/ThunieFox";
 
 const LINKS = [
   { href: "#fonctionnalites", label: "Fonctionnalités" },
@@ -44,7 +45,7 @@ export default function Navbar() {
     >
       <div className="max-w-6xl mx-auto px-6 safe-top pb-4 flex items-center justify-between">
         <a href="#" className="flex items-center gap-2 group">
-          <span className="text-2xl">🦊</span>
+          <ThunieFox className="w-8 h-8" />
           <span className="font-heading font-extrabold text-xl text-ink group-hover:text-coral transition-colors">
             MyThune
           </span>
@@ -58,10 +59,7 @@ export default function Navbar() {
           ))}
         </div>
 
-        <EnterAppButton className="btn shrink-0 rounded-xl2 bg-coral text-white font-heading font-semibold text-sm px-4 py-2.5 sm:px-5 shadow-warm">
-          <span className="sm:hidden">Essayer</span>
-          <span className="hidden sm:inline">Essayer gratuitement</span>
-        </EnterAppButton>
+        <InstallAppButton className="btn shrink-0 rounded-xl2 bg-coral text-white font-heading font-semibold text-sm px-4 py-2.5 sm:px-5 shadow-warm" />
       </div>
     </nav>
   );

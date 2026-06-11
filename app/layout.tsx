@@ -23,6 +23,11 @@ export const metadata: Metadata = {
   description:
     "Glisse ton relevé PDF. Thunie, ton coach IA, décortique tout en 10 secondes et te dit où va vraiment ta thune. Zéro connexion bancaire, zéro saisie manuelle.",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export const viewport: Viewport = {

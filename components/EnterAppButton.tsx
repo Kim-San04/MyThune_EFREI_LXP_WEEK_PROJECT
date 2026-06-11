@@ -1,6 +1,8 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { usePwaInstall } from "@/lib/use-pwa-install";
 
 interface EnterAppButtonProps {
   className?: string;
@@ -12,9 +14,15 @@ export const ENTER_APP_EVENT = "mythune:enter-app";
 
 export default function EnterAppButton({ className, id, children }: EnterAppButtonProps) {
   const { status } = useSession();
+  const router = useRouter();
+  const { isMobile } = usePwaInstall();
 
   function handleClick(e: React.MouseEvent) {
     e.preventDefault();
+    if (isMobile) {
+      router.push("/installer");
+      return;
+    }
     window.dispatchEvent(
       new CustomEvent(ENTER_APP_EVENT, { detail: { authenticated: status === "authenticated" } })
     );

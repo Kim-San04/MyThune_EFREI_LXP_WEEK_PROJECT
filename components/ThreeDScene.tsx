@@ -45,7 +45,7 @@ function Coin({ position, scale = 1, speed = 1, offset = 0 }: CoinProps) {
 
   return (
     <mesh ref={ref} position={position} castShadow>
-      <cylinderGeometry args={[0.6, 0.6, 0.12, 40]} />
+      <cylinderGeometry args={[0.85, 0.85, 0.16, 40]} />
       <meshStandardMaterial
         color="#D97706"
         metalness={0.75}
@@ -57,17 +57,17 @@ function Coin({ position, scale = 1, speed = 1, offset = 0 }: CoinProps) {
   );
 }
 
-function CoinField() {
+function CoinField({ spread }: { spread: number }) {
   const coins = useMemo<CoinProps[]>(
     () => [
-      { position: [-3.3, 1.7, -1.2], scale: 1.3, speed: 0.8, offset: 0 },
-      { position: [3.3, 0.2, -1.4], scale: 1.0, speed: 1.1, offset: 1.4 },
-      { position: [2.8, 2.3, -1.8], scale: 0.7, speed: 0.95, offset: 2.6 },
-      { position: [-3.0, -2.1, -1.6], scale: 0.85, speed: 1.05, offset: 3.6 },
-      { position: [0.3, 3.0, -2.0], scale: 0.6, speed: 1.2, offset: 0.8 },
-      { position: [-0.4, -3.0, -1.8], scale: 0.65, speed: 0.9, offset: 4.2 },
+      { position: [-1.8 * spread, 0.95 * spread, -1.0], scale: 1.3, speed: 0.8, offset: 0 },
+      { position: [1.8 * spread, 0.1 * spread, -1.0], scale: 1.0, speed: 1.1, offset: 1.4 },
+      { position: [1.55 * spread, 1.25 * spread, -1.2], scale: 0.7, speed: 0.95, offset: 2.6 },
+      { position: [-1.65 * spread, -1.15 * spread, -1.2], scale: 0.85, speed: 1.05, offset: 3.6 },
+      { position: [0.15 * spread, 1.65 * spread, -1.4], scale: 0.6, speed: 1.2, offset: 0.8 },
+      { position: [-0.2 * spread, -1.65 * spread, -1.2], scale: 0.65, speed: 0.9, offset: 4.2 },
     ],
-    []
+    [spread]
   );
 
   return (
@@ -79,14 +79,25 @@ function CoinField() {
   );
 }
 
+interface ThreeDSceneProps {
+  /** Multiplier applied to each coin's x/y position — lower values pull the coins toward the center. */
+  spread?: number;
+}
+
 /**
  * Lightweight ambient 3D scene: a handful of slowly spinning, bobbing gold
  * coins behind the hero mockup. Kept minimal (low geometry, no postprocessing)
  * so it stays smooth on modest laptops/phones.
  */
-export default function ThreeDScene() {
+export default function ThreeDScene({ spread = 1.4 }: ThreeDSceneProps) {
   return (
-    <div className="absolute -inset-12 sm:-inset-24 -z-10 pointer-events-none">
+    <div
+      className="absolute -inset-12 sm:-inset-24 -z-10 pointer-events-none"
+      style={{
+        maskImage: "radial-gradient(closest-side, black 55%, transparent 100%)",
+        WebkitMaskImage: "radial-gradient(closest-side, black 55%, transparent 100%)",
+      }}
+    >
       <Canvas
         camera={{ position: [0, 0, 6], fov: 60 }}
         dpr={[1, 1.5]}
@@ -96,7 +107,7 @@ export default function ThreeDScene() {
         <directionalLight position={[4, 6, 5]} intensity={1.3} color="#FFFFFF" />
         <directionalLight position={[-5, -3, 2]} intensity={1} color="#8B5CF6" />
         <Suspense fallback={null}>
-          <CoinField />
+          <CoinField spread={spread} />
         </Suspense>
       </Canvas>
     </div>

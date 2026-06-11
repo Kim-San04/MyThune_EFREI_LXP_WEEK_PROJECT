@@ -28,6 +28,8 @@ export default function AppPage() {
     if (status !== "authenticated" || !userId) return;
 
     (async () => {
+      const minDelay = new Promise((resolve) => setTimeout(resolve, 1500));
+
       const stored = await getStatements(userId);
       setStatements(stored);
       if (stored.length > 0) {
@@ -45,11 +47,12 @@ export default function AppPage() {
         } else {
           setNeedsUnlock(true);
         }
+        await minDelay;
         setLoading(false);
         return;
       }
 
-      if (stored.length === 0) setUploadOpen(true);
+      await minDelay;
       setLoading(false);
     })();
   }, [status, userId, dek]);
@@ -60,8 +63,6 @@ export default function AppPage() {
     setStatements(stored);
     if (stored.length > 0) {
       setActiveBudget(stored[0].budget);
-    } else {
-      setUploadOpen(true);
     }
     setNeedsUnlock(false);
   }, [userId]);
@@ -144,8 +145,8 @@ export default function AppPage() {
   }, []);
 
   const handleCloseUpload = useCallback(() => {
-    if (statements.length > 0) setUploadOpen(false);
-  }, [statements]);
+    setUploadOpen(false);
+  }, []);
 
   if (loading || status === "loading") return <LoadingScreen />;
   if (needsUnlock && userId) return <UnlockScreen userId={userId} onUnlocked={handleUnlocked} />;

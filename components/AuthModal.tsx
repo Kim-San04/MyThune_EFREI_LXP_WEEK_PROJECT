@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { getSession, signIn } from "next-auth/react";
 import { Lock, Mail, User, X } from "lucide-react";
@@ -24,10 +24,15 @@ interface AuthModalProps {
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  initialMode?: Mode;
 }
 
-export default function AuthModal({ open, onClose, onSuccess }: AuthModalProps) {
-  const [mode, setMode] = useState<Mode>("login");
+export default function AuthModal({ open, onClose, onSuccess, initialMode = "login" }: AuthModalProps) {
+  const [mode, setMode] = useState<Mode>(initialMode);
+
+  useEffect(() => {
+    if (open) setMode(initialMode);
+  }, [open, initialMode]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import BackgroundAmbience from "@/components/BackgroundAmbience";
+import CoinBackground from "@/components/CoinBackground";
 import AppEntryGate from "@/components/AppEntryGate";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
@@ -15,6 +16,7 @@ export default function Home() {
   return (
     <>
       <BackgroundAmbience />
+      <CoinBackground />
       <div className="relative z-10">
         <Navbar />
         <main>

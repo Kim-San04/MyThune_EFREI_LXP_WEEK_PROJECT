@@ -143,7 +143,7 @@ export default function DonutChart({ segments, total, onSegmentClick }: DonutCha
   }, [chartData]);
 
   return (
-    <div className="w-[260px] h-[260px] mx-auto cursor-pointer">
+    <div className="w-[200px] h-[200px] sm:w-[260px] sm:h-[260px] mx-auto cursor-pointer">
       <canvas ref={canvasRef} />
     </div>
   );

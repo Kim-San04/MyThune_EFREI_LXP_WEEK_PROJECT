@@ -85,26 +85,26 @@ export default function ThunieChatSection() {
   }, [mode]);
 
   return (
-    <section ref={sectionRef} id="thunie" className="relative py-28 px-6">
+    <section ref={sectionRef} id="thunie" className="relative py-14 sm:py-20 md:py-28 px-6">
       <div className="max-w-3xl mx-auto text-center">
-        <h2 className="font-heading font-bold text-3xl sm:text-4xl text-ink mb-3">
+        <h2 className="font-heading font-bold text-2xl sm:text-4xl text-ink mb-3">
           Thunie, ton pote de poche.
         </h2>
-        <p className="text-ink-soft text-lg mb-12">
+        <p className="text-ink-soft text-base sm:text-lg mb-8 sm:mb-12">
           Un coach IA qui te parle comme un ami, pas comme une banque.
         </p>
 
-        <div className="thunie-illustration mx-auto w-44 h-44 sm:w-52 sm:h-52 mb-10 animate-float">
+        <div className="thunie-illustration mx-auto w-28 h-28 sm:w-52 sm:h-52 mb-6 sm:mb-10 animate-float">
           <ThunieFox className="w-full h-full drop-shadow-[0_12px_32px_rgba(249,115,22,0.25)]" />
         </div>
 
         {/* Mode toggle */}
-        <div className="inline-flex glass rounded-full p-1.5 gap-1 mb-10">
+        <div className="inline-flex glass rounded-full p-1.5 gap-1 mb-6 sm:mb-10">
           {MODES.map((m) => (
             <button
               key={m.id}
               onClick={() => setMode(m.id)}
-              className={`px-5 py-2.5 rounded-full text-sm font-heading font-bold transition-all duration-300 ${
+              className={`px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-heading font-bold transition-all duration-300 ${
                 mode === m.id
                   ? "bg-coral text-white shadow-warm"
                   : "text-ink-mid hover:text-coral"
@@ -123,7 +123,7 @@ export default function ThunieChatSection() {
               className={`chat-bubble flex ${bubble.from === "thunie" ? "justify-start" : "justify-end"}`}
             >
               <div
-                className={`max-w-[80%] sm:max-w-[70%] rounded-2xl px-5 py-3.5 leading-relaxed text-[15px] ${
+                className={`max-w-[80%] sm:max-w-[70%] rounded-2xl px-4 py-3 sm:px-5 sm:py-3.5 leading-relaxed text-sm sm:text-[15px] ${
                   bubble.from === "thunie"
                     ? "bg-coral-light border border-coral/20 rounded-tl-sm text-ink-mid"
                     : "bg-violet text-white rounded-tr-sm shadow-warm"

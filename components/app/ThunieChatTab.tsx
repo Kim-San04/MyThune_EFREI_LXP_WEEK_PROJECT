@@ -118,26 +118,26 @@ export default function ThunieChatTab({ budget }: ThunieChatTabProps) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
-      className="flex flex-col h-[calc(100vh-7.5rem)] sm:h-[calc(100vh-9rem)]"
+      className="flex flex-col h-[calc(100dvh-8.5rem)] sm:h-[calc(100dvh-10rem)]"
     >
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h1 className="font-heading font-extrabold text-2xl text-ink mb-1">Thunie Chat</h1>
-          <p className="text-sm text-ink-mid">Discute avec ton coach budget, en mode doux ou cash</p>
+      <div className="flex items-center justify-between gap-3 mb-2.5 sm:mb-4">
+        <div className="min-w-0">
+          <h1 className="font-heading font-extrabold text-lg sm:text-2xl text-ink mb-0.5 sm:mb-1">Thunie Chat</h1>
+          <p className="hidden sm:block text-sm text-ink-mid">Discute avec ton coach budget, en mode doux ou cash</p>
         </div>
 
-        <div className="glass rounded-full p-1 flex items-center gap-1">
+        <div className="glass rounded-full p-1 flex items-center gap-1 shrink-0">
           <button
             onClick={() => setMode("bienveillant")}
-            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full text-xs font-semibold transition-all ${
               mode === "bienveillant" ? "bg-sage text-white shadow-sm" : "text-ink-mid hover:text-ink"
             }`}
           >
-            <Smile size={14} strokeWidth={2.4} /> Bienveillant
+            <Smile size={14} strokeWidth={2.4} /> <span className="hidden sm:inline">Bienveillant</span>
           </button>
           <button
             onClick={() => setMode("sarcastique")}
-            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full text-xs font-semibold transition-all ${
               mode === "sarcastique" ? "bg-coral text-white shadow-sm" : "text-ink-mid hover:text-ink"
             }`}
           >
@@ -192,18 +192,18 @@ export default function ThunieChatTab({ budget }: ThunieChatTabProps) {
           e.preventDefault();
           send(input);
         }}
-        className="flex items-center gap-3"
+        className="flex items-center gap-2 bg-white border border-[#EDE8E0] rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] p-2 shrink-0"
       >
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Écris ton message à Thunie…"
-          className="flex-1 px-4 py-3 rounded-2xl bg-cream-dark text-sm text-ink placeholder:text-ink-soft focus:outline-none focus:ring-2 focus:ring-amber/40"
+          className="flex-1 min-w-0 px-3.5 py-3 rounded-xl bg-cream-dark text-sm text-ink placeholder:text-ink-soft focus:outline-none focus:ring-2 focus:ring-amber/40"
         />
         <button
           type="submit"
           disabled={isStreaming || !input.trim()}
-          className="btn shrink-0 w-12 h-12 rounded-2xl bg-coral text-white flex items-center justify-center shadow-warm disabled:opacity-40"
+          className="btn shrink-0 w-12 h-12 rounded-xl bg-coral text-white flex items-center justify-center shadow-warm disabled:opacity-40"
           aria-label="Envoyer"
         >
           <Send size={18} strokeWidth={2.4} />

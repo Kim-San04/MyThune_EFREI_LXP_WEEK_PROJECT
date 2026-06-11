@@ -9,13 +9,6 @@ import HeroMockup from "@/components/HeroMockup";
 
 const ThreeDScene = dynamic(() => import("@/components/ThreeDScene"), { ssr: false });
 
-const AVATARS = [
-  { initials: "LM", color: "#F59E0B" },
-  { initials: "JD", color: "#F97316" },
-  { initials: "SK", color: "#10B981" },
-  { initials: "RA", color: "#8B5CF6" },
-];
-
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const mockupWrapRef = useRef<HTMLDivElement>(null);
@@ -34,9 +27,7 @@ export default function HeroSection() {
           duration: 0.85,
           ease: "back.out(1.8)",
         }, "-=0.2")
-        .from(".hero-sub", { y: 20, opacity: 0, duration: 0.6 }, "-=0.35")
-        .from(".hero-ctas", { y: 20, opacity: 0, duration: 0.5 }, "-=0.3")
-        .from(".hero-proof", { y: 16, opacity: 0, duration: 0.5 }, "-=0.25")
+        .from(".hero-ctas", { y: 20, opacity: 0, duration: 0.6 }, "-=0.35")
         .from(".hero-mockup", { x: 40, opacity: 0, duration: 0.9, ease: "power2.out" }, "-=0.6")
         .from(".hero-bubble", { scale: 0, opacity: 0, rotate: -18, duration: 0.65, ease: "back.out(2.4)" }, "-=0.15");
     }, sectionRef);
@@ -90,30 +81,26 @@ export default function HeroSection() {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative pt-36 pb-24 px-6 max-w-6xl mx-auto grid lg:grid-cols-[55%_45%] gap-16 items-center overflow-visible"
+      className="relative pt-24 pb-14 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24 px-6 max-w-6xl mx-auto grid lg:grid-cols-[55%_45%] gap-10 lg:gap-16 items-center overflow-visible"
     >
       {/* ── Left: copy ─────────────────────────────────────────── */}
       <div className="relative z-10">
-        <span className="hero-badge inline-flex items-center gap-2 bg-amber-light text-amber font-semibold text-sm px-4 py-2 rounded-full mb-7">
-          <Sparkles size={16} strokeWidth={2.4} />
+        <span className="hero-badge inline-flex items-center gap-2 bg-amber-light text-amber font-semibold text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full mb-5 sm:mb-7">
+          <Sparkles size={14} strokeWidth={2.4} className="sm:hidden" />
+          <Sparkles size={16} strokeWidth={2.4} className="hidden sm:block" />
           Zéro connexion bancaire · Zéro saisie manuelle
         </span>
 
-        <h1 className="font-heading font-extrabold text-[42px] leading-[1.08] sm:text-6xl lg:text-[72px] text-ink mb-6 text-balance">
+        <h1 className="font-heading font-extrabold text-[32px] leading-[1.15] sm:text-6xl lg:text-[72px] text-ink mb-6 text-balance">
           <HeroLine words={["Encore", "un"]} />
           <HeroLine words={["Uber", "Eats", "et"]} />
           <HeroLine words={["t'es", "actionnaire."]} gradient />
         </h1>
 
-        <p className="hero-sub font-body text-lg text-ink-mid max-w-xl mb-9 leading-relaxed">
-          Glisse ton relevé PDF. Thunie, ton coach IA, décortique tout en 10
-          secondes et te dit où va vraiment ta thune.
-        </p>
-
-        <div className="hero-ctas flex flex-wrap items-center gap-6 mb-10">
+        <div className="hero-ctas flex flex-wrap items-center gap-4 sm:gap-6 mb-8 sm:mb-10">
           <EnterAppButton
             id="hero-cta"
-            className="btn rounded-2xl bg-coral text-white font-heading font-bold text-base px-8 py-4 shadow-warm hover:scale-[1.03] transition-transform"
+            className="btn rounded-2xl bg-coral text-white font-heading font-bold text-sm sm:text-base px-6 py-3.5 sm:px-8 sm:py-4 shadow-warm hover:scale-[1.03] transition-transform"
           >
             Analyser mon relevé →
           </EnterAppButton>
@@ -123,24 +110,6 @@ export default function HeroSection() {
           >
             Voir comment ça marche ↓
           </a>
-        </div>
-
-        <div className="hero-proof flex items-center gap-3">
-          <div className="flex -space-x-3">
-            {AVATARS.map((a) => (
-              <div
-                key={a.initials}
-                className="w-10 h-10 rounded-full border-2 border-cream flex items-center justify-center text-white text-xs font-bold font-heading"
-                style={{ background: a.color }}
-              >
-                {a.initials}
-              </div>
-            ))}
-          </div>
-          <p className="text-sm text-ink-mid font-medium">
-            <span className="font-heading font-bold text-ink">2 847 étudiants</span> gèrent
-            mieux leur argent
-          </p>
         </div>
       </div>
 
