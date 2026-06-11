@@ -76,43 +76,6 @@ Relevé PDF → Analyse (Gemini) → IndexedDB (par utilisateur) → Dashboard +
 
 ---
 
-## 🚀 Lancer le projet en local
-
-```bash
-# Cloner le repo
-git clone https://github.com/Kim-San04/MyThune_EFREI_LXP_WEEK_PROJECT.git
-cd MyThune_EFREI_LXP_WEEK_PROJECT
-
-# Installer les dépendances
-npm install
-
-# Lancer en développement
-npm run dev
-```
-
-Ouvre [http://localhost:3000](http://localhost:3000) dans ton navigateur.
-
-### Variables d'environnement
-
-Crée un fichier `.env.local` à la racine :
-
-```env
-DATABASE_URL=...
-NEXTAUTH_SECRET=...
-GEMINI_API_KEY=...
-```
-
----
-
-## 📦 Déploiement
-
-Déployé en continu sur **Vercel** :
-
-```bash
-npx vercel --prod
-```
-
----
 
 ## 👥 Équipe
 
