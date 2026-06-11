@@ -38,8 +38,6 @@ En une semaine, notre groupe a conçu, développé et déployé une application 
 
 ![MyThune Landing Page — Hero](https://github.com/user-attachments/assets/83fd5934-63a2-435f-8322-db8308ad4180)
 
-![MyThune Landing Page — Fonctionnalités](https://github.com/user-attachments/assets/0f6a89ec-ea3f-47d2-ba6e-544bfef2c4e8)
-
 ### Application
 
 ![MyThune App — Tableau de bord](https://github.com/user-attachments/assets/3f477026-d11e-4680-8181-4bf9a9747870)
