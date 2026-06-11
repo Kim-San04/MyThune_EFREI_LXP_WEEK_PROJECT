@@ -2,10 +2,21 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { Lock, Mail, User, X } from "lucide-react";
 import { toast } from "sonner";
 import ThunieFox from "@/components/ThunieFox";
+import {
+  deriveKek,
+  exportDekRaw,
+  generateDek,
+  generateSalt,
+  unwrapDek,
+  wrapDek,
+} from "@/lib/crypto";
+import { mergeBackup, pushBackup } from "@/lib/vault-sync";
+import { saveCachedDek } from "@/lib/statements-db";
+import { useVault } from "@/lib/vault-context";
 
 type Mode = "login" | "register";
 
@@ -21,6 +32,7 @@ export default function AuthModal({ open, onClose, onSuccess }: AuthModalProps) 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { setDek } = useVault();
 
   function reset() {
     setName("");
@@ -51,11 +63,23 @@ export default function AuthModal({ open, onClose, onSuccess }: AuthModalProps) 
     setLoading(true);
 
     try {
+      let registerDek: CryptoKey | null = null;
+
       if (mode === "register") {
+        const salt = generateSalt();
+        const kek = await deriveKek(password, salt);
+        const dek = await generateDek();
+        const { wrappedDek, wrappedDekIv } = await wrapDek(dek, kek);
+
         const res = await fetch("/api/auth/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name: name.trim(), email: email.trim(), password }),
+          body: JSON.stringify({
+            name: name.trim(),
+            email: email.trim(),
+            password,
+            vault: { salt, wrappedDek, wrappedDekIv },
+          }),
         });
         const data = await res.json();
         if (!res.ok) {
@@ -63,6 +87,7 @@ export default function AuthModal({ open, onClose, onSuccess }: AuthModalProps) 
           setLoading(false);
           return;
         }
+        registerDek = dek;
       }
 
       const result = await signIn("credentials", {
@@ -77,11 +102,64 @@ export default function AuthModal({ open, onClose, onSuccess }: AuthModalProps) 
         return;
       }
 
+      if (registerDek) {
+        const session = await getSession();
+        const uid = session?.user?.id;
+        if (uid) saveCachedDek(uid, await exportDekRaw(registerDek)).catch(() => {});
+        setDek(registerDek);
+      } else {
+        await unlockVault(password);
+      }
+
       reset();
       onSuccess();
     } catch {
       toast.error("Une erreur inattendue est survenue.");
       setLoading(false);
+    }
+  }
+
+  async function unlockVault(currentPassword: string) {
+    try {
+      const session = await getSession();
+      const userId = session?.user?.id;
+      if (!userId) return;
+
+      const res = await fetch("/api/vault");
+      const vault = await res.json();
+      if (!res.ok) return;
+
+      if (!vault.hasVault) {
+        const salt = generateSalt();
+        const kek = await deriveKek(currentPassword, salt);
+        const dek = await generateDek();
+        const { wrappedDek, wrappedDekIv } = await wrapDek(dek, kek);
+
+        await fetch("/api/vault", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ salt, wrappedDek, wrappedDekIv }),
+        });
+
+        await saveCachedDek(userId, await exportDekRaw(dek));
+        setDek(dek);
+        pushBackup(userId, dek).catch(() => {});
+        return;
+      }
+
+      const kek = await deriveKek(currentPassword, vault.kdfSalt);
+      const dek = await unwrapDek({ wrappedDek: vault.wrappedDek, wrappedDekIv: vault.wrappedDekIv }, kek);
+
+      if (vault.encryptedData && vault.dataIv) {
+        await mergeBackup(userId, { data: vault.encryptedData, iv: vault.dataIv }, dek);
+      } else {
+        pushBackup(userId, dek).catch(() => {});
+      }
+
+      await saveCachedDek(userId, await exportDekRaw(dek));
+      setDek(dek);
+    } catch {
+      // Sync silencieuse — l'utilisateur reste connecté même si la sauvegarde échoue.
     }
   }
 

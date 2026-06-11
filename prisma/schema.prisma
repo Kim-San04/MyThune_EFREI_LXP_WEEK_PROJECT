@@ -17,6 +17,7 @@ model User {
 
   accounts Account[]
   sessions Session[]
+  vaultBackup VaultBackup?
 
   createdAt DateTime @default(now())
 }
@@ -55,4 +56,21 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model VaultBackup {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  wrappedDek    String
+  wrappedDekIv  String
+  kdfSalt       String
+  kdfIterations Int    @default(210000)
+
+  encryptedData String? @db.Text
+  dataIv        String?
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
 }

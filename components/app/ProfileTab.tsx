@@ -55,6 +55,11 @@ export default function ProfileTab({ statements, activeBudget, onSelectStatement
         </button>
       </div>
 
+      <p className="text-xs text-ink-soft px-1">
+        Tes données sont chiffrées de bout en bout : si tu perds ton mot de passe, ta sauvegarde
+        ne pourra pas être récupérée.
+      </p>
+
       <div className="flex items-center justify-between gap-4">
         <h2 className="font-heading font-bold text-lg text-ink">Tes relevés ({statements.length})</h2>
         <button

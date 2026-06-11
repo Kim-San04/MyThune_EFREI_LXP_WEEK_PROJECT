@@ -9,24 +9,50 @@ export interface StoredStatement {
   budget: Budget;
 }
 
+interface VaultKeyEntry {
+  userId: string;
+  dek: string;
+}
+
 interface MyThuneDB extends DBSchema {
   statements: {
     key: string;
     value: StoredStatement;
     indexes: { "by-user": string };
   };
+  vaultKeys: {
+    key: string;
+    value: VaultKeyEntry;
+  };
 }
 
 const DB_NAME = "mythune";
 const STORE_NAME = "statements";
+const VAULT_KEYS_STORE = "vaultKeys";
 
 function getDb() {
-  return openDB<MyThuneDB>(DB_NAME, 1, {
-    upgrade(db) {
-      const store = db.createObjectStore(STORE_NAME, { keyPath: "id" });
-      store.createIndex("by-user", "userId");
+  return openDB<MyThuneDB>(DB_NAME, 2, {
+    upgrade(db, oldVersion) {
+      if (oldVersion < 1) {
+        const store = db.createObjectStore(STORE_NAME, { keyPath: "id" });
+        store.createIndex("by-user", "userId");
+      }
+      if (oldVersion < 2) {
+        db.createObjectStore(VAULT_KEYS_STORE, { keyPath: "userId" });
+      }
     },
   });
+}
+
+export async function getCachedDek(userId: string): Promise<string | null> {
+  const db = await getDb();
+  const entry = await db.get(VAULT_KEYS_STORE, userId);
+  return entry?.dek ?? null;
+}
+
+export async function saveCachedDek(userId: string, dek: string): Promise<void> {
+  const db = await getDb();
+  await db.put(VAULT_KEYS_STORE, { userId, dek });
 }
 
 function statementId(userId: string, month: string): string {

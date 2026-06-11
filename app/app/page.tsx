@@ -5,32 +5,66 @@ import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import LoadingScreen from "@/components/app/LoadingScreen";
 import Dashboard from "@/components/app/Dashboard";
-import { deleteStatement, getStatements, saveStatement, type StoredStatement } from "@/lib/statements-db";
+import UnlockScreen from "@/components/app/UnlockScreen";
+import { deleteStatement, getCachedDek, getStatements, saveStatement, type StoredStatement } from "@/lib/statements-db";
+import { importDekRaw } from "@/lib/crypto";
+import { pushBackup } from "@/lib/vault-sync";
+import { useVault } from "@/lib/vault-context";
 import type { Budget } from "@/lib/types";
 
 export default function AppPage() {
   const { data: session, status } = useSession();
   const userId = session?.user?.id;
+  const { dek, setDek } = useVault();
 
   const [loading, setLoading] = useState(true);
   const [statements, setStatements] = useState<StoredStatement[]>([]);
   const [activeBudget, setActiveBudget] = useState<Budget | null>(null);
   const [uploadOpen, setUploadOpen] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
+  const [needsUnlock, setNeedsUnlock] = useState(false);
 
   useEffect(() => {
     if (status !== "authenticated" || !userId) return;
 
-    getStatements(userId).then((stored) => {
+    (async () => {
+      const stored = await getStatements(userId);
       setStatements(stored);
       if (stored.length > 0) {
         setActiveBudget(stored[0].budget);
-      } else {
-        setUploadOpen(true);
       }
+
+      if (!dek) {
+        const cached = await getCachedDek(userId);
+        if (cached) {
+          try {
+            setDek(await importDekRaw(cached));
+          } catch {
+            setNeedsUnlock(true);
+          }
+        } else {
+          setNeedsUnlock(true);
+        }
+        setLoading(false);
+        return;
+      }
+
+      if (stored.length === 0) setUploadOpen(true);
       setLoading(false);
-    });
-  }, [status, userId]);
+    })();
+  }, [status, userId, dek]);
+
+  const handleUnlocked = useCallback(async () => {
+    if (!userId) return;
+    const stored = await getStatements(userId);
+    setStatements(stored);
+    if (stored.length > 0) {
+      setActiveBudget(stored[0].budget);
+    } else {
+      setUploadOpen(true);
+    }
+    setNeedsUnlock(false);
+  }, [userId]);
 
   const handleFile = useCallback(
     async (file: File) => {
@@ -62,6 +96,8 @@ export default function AppPage() {
             ? "Relevé mis à jour — Thunie a tout recalculé pour toi."
             : "Ton relevé est prêt ! Thunie a tout décortiqué pour toi."
         );
+
+        if (dek) pushBackup(userId, dek).catch(() => {});
       } catch (err) {
         const message = err instanceof Error ? err.message : "Une erreur inattendue est survenue.";
         toast.error(message);
@@ -69,7 +105,7 @@ export default function AppPage() {
         setAnalyzing(false);
       }
     },
-    [userId, statements]
+    [userId, statements, dek]
   );
 
   const handleSelectStatement = useCallback(
@@ -97,8 +133,10 @@ export default function AppPage() {
         }
       }
       toast("Relevé supprimé");
+
+      if (dek) pushBackup(userId, dek).catch(() => {});
     },
-    [userId, statements, activeBudget]
+    [userId, statements, activeBudget, dek]
   );
 
   const handleUploadNew = useCallback(() => {
@@ -110,6 +148,7 @@ export default function AppPage() {
   }, [statements]);
 
   if (loading || status === "loading") return <LoadingScreen />;
+  if (needsUnlock && userId) return <UnlockScreen userId={userId} onUnlocked={handleUnlocked} />;
 
   return (
     <Dashboard

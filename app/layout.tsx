@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Nunito } from "next/font/google";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
+import { VaultProvider } from "@/lib/vault-context";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -39,7 +40,9 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className={`${jakarta.variable} ${nunito.variable} font-body antialiased bg-cream text-ink`}>
-        <SessionProviderWrapper>{children}</SessionProviderWrapper>
+        <SessionProviderWrapper>
+          <VaultProvider>{children}</VaultProvider>
+        </SessionProviderWrapper>
       </body>
     </html>
   );
