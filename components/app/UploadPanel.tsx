@@ -8,6 +8,7 @@ interface UploadPanelProps {
   onFileSelected: (file: File) => void;
   title?: string;
   subtitle?: string;
+  compact?: boolean;
 }
 
 const REASSURANCES = [
@@ -20,6 +21,7 @@ export default function UploadPanel({
   onFileSelected,
   title = "Dépose ton relevé, Thunie s'occupe du reste",
   subtitle = "Glisse ton relevé bancaire au format PDF ci-dessous. En quelques secondes, Thunie le lit, le trie par catégorie et te prépare ton tableau de bord.",
+  compact = false,
 }: UploadPanelProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -51,14 +53,16 @@ export default function UploadPanel({
 
   return (
     <div className="w-full max-w-xl mx-auto">
-      <div className="text-center mb-10">
-        <span className="inline-flex items-center gap-2 bg-amber-light text-amber font-semibold text-sm px-4 py-2 rounded-full mb-5">
-          <Sparkles size={16} strokeWidth={2.4} />
-          Étape 1 sur 1 — c&apos;est tout ce qu&apos;il faut
-        </span>
-        <h1 className="font-heading font-extrabold text-3xl sm:text-4xl text-ink mb-3">{title}</h1>
-        <p className="font-body text-ink-mid max-w-md mx-auto leading-relaxed">{subtitle}</p>
-      </div>
+      {!compact && (
+        <div className="text-center mb-10">
+          <span className="inline-flex items-center gap-2 bg-amber-light text-amber font-semibold text-sm px-4 py-2 rounded-full mb-5">
+            <Sparkles size={16} strokeWidth={2.4} />
+            Étape 1 sur 1 — c&apos;est tout ce qu&apos;il faut
+          </span>
+          <h1 className="font-heading font-extrabold text-3xl sm:text-4xl text-ink mb-3">{title}</h1>
+          <p className="font-body text-ink-mid max-w-md mx-auto leading-relaxed">{subtitle}</p>
+        </div>
+      )}
 
       <div
         onDragOver={(e) => {
@@ -97,16 +101,18 @@ export default function UploadPanel({
         <p className="text-sm text-ink-soft">Format PDF uniquement · 15 Mo max</p>
       </div>
 
-      <ul className="mt-9 space-y-3">
-        {REASSURANCES.map(({ icon: Icon, text }) => (
-          <li key={text} className="flex items-start gap-3 text-sm text-ink-mid">
-            <span className="mt-0.5 w-7 h-7 shrink-0 rounded-full bg-sage-light flex items-center justify-center">
-              <Icon size={14} className="text-sage" strokeWidth={2.4} />
-            </span>
-            <span className="leading-relaxed">{text}</span>
-          </li>
-        ))}
-      </ul>
+      {!compact && (
+        <ul className="mt-9 space-y-3">
+          {REASSURANCES.map(({ icon: Icon, text }) => (
+            <li key={text} className="flex items-start gap-3 text-sm text-ink-mid">
+              <span className="mt-0.5 w-7 h-7 shrink-0 rounded-full bg-sage-light flex items-center justify-center">
+                <Icon size={14} className="text-sage" strokeWidth={2.4} />
+              </span>
+              <span className="leading-relaxed">{text}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

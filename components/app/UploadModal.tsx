@@ -41,7 +41,14 @@ export default function UploadModal({ open, analyzing, onClose, onFileSelected }
               </button>
             )}
 
-            {analyzing ? <AnalyzingPanel /> : <UploadPanel onFileSelected={onFileSelected} />}
+            {analyzing ? (
+              <AnalyzingPanel />
+            ) : (
+              <>
+                <h2 className="font-heading font-extrabold text-xl text-ink mb-5">Importer un relevé</h2>
+                <UploadPanel onFileSelected={onFileSelected} compact />
+              </>
+            )}
           </motion.div>
         </motion.div>
       )}
